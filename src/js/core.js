@@ -712,21 +712,24 @@ var publicMethods = {
 	},
 
 	goTo: function (index) {
-		index = _getLoopedId(index);
+		if (_options.animateTransitions) {
+		} else {
+			index = _getLoopedId(index);
 
-		var diff = index - _currentItemIndex;
-		_indexDiff = diff;
+			var diff = index - _currentItemIndex;
+			_indexDiff = diff;
 
-		_currentItemIndex = index;
-		self.currItem = _getItemAt(_currentItemIndex);
-		_currPositionIndex -= diff;
+			_currentItemIndex = index;
+			self.currItem = _getItemAt(_currentItemIndex);
+			_currPositionIndex -= diff;
 
-		_moveMainScroll(_slideSize.x * _currPositionIndex);
+			_moveMainScroll(_slideSize.x * _currPositionIndex);
 
-		_stopAllAnimations();
-		_mainScrollAnimating = false;
+			_stopAllAnimations();
+			_mainScrollAnimating = false;
 
-		self.updateCurrItem();
+			self.updateCurrItem();
+		}
 	},
 	next: function () {
 		if (!_options.loop && _currentItemIndex === _getNumItems() - 1) {

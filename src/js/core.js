@@ -713,6 +713,20 @@ var publicMethods = {
 
 	goTo: function (index) {
 		if (_options.animateTransitions) {
+			_finishSwipeMainScrollGesture('swipe', 80 * index, {
+				lastFlickDist: {
+					x: 80,
+					y: 0
+				},
+				lastFlickOffset: {
+					x: 80 * index,
+					y: 0
+				},
+				lastFlickSpeed: {
+					x: 2 * index,
+					y: 0
+				}
+			});
 		} else {
 			index = _getLoopedId(index);
 

@@ -749,14 +749,22 @@ var publicMethods = {
 		if (!_options.loop && _currentItemIndex === _getNumItems() - 1) {
 			return;
 		}
-		self.goTo(parseInt(_currentItemIndex) + 1);
+		if (_options.animateTransitions) {
+			self.goTo(-1);
+		} else {
+			self.goTo(parseInt(_currentItemIndex) + 1);
+		}
 	},
 
 	prev: function () {
 		if (!_options.loop && _currentItemIndex === 0) {
 			return;
 		}
-		self.goTo(parseInt(_currentItemIndex) - 1);
+		if (_options.animateTransitions) {
+			self.goTo(1);
+		} else {
+			self.goTo(parseInt(_currentItemIndex) - 1);
+		}
 	},
 
 	setItems: function (items) {

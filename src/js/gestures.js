@@ -706,7 +706,8 @@ var _gestureStartTime,
 
 		// main scroll
 		if ((_mainScrollShifted || _mainScrollAnimating) && numPoints === 0) {
-			var itemChanged = _finishSwipeMainScrollGesture(gestureType, _releaseAnimData);
+			var totalShiftDist = _currPoint.x - _startPoint.x,
+				itemChanged = _finishSwipeMainScrollGesture(gestureType, totalShiftDist, _releaseAnimData);
 			if (itemChanged) {
 				return;
 			}
@@ -869,7 +870,7 @@ var _gestureStartTime,
 		animData.lastNow = _getCurrentTime();
 		animData.panAnimLoop();
 	},
-	_finishSwipeMainScrollGesture = function (gestureType, _releaseAnimData) {
+	_finishSwipeMainScrollGesture = function (gestureType, totalShiftDist, _releaseAnimData) {
 		var itemChanged;
 		if (!_mainScrollAnimating) {
 			_currZoomedItemIndex = _currentItemIndex;
@@ -878,8 +879,7 @@ var _gestureStartTime,
 		var itemsDiff;
 
 		if (gestureType === 'swipe') {
-			var totalShiftDist = _currPoint.x - _startPoint.x,
-				isFastLastFlick = _releaseAnimData.lastFlickDist.x < 10;
+			var isFastLastFlick = _releaseAnimData.lastFlickDist.x < 10;
 
 			// if container is shifted for more than MIN_SWIPE_DISTANCE,
 			// and last flick gesture was in right direction

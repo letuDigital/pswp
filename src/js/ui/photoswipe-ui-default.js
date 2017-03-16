@@ -45,7 +45,7 @@
 
 				addCaptionHTMLFn: function (item, captionEl /*, isFake */) {
 					if (!item.title) {
-						captionEl.children[0].innerHTML = '';
+						framework.resetEl(captionEl.firstChild);
 						return false;
 					}
 					captionEl.children[0].innerHTML = item.title;

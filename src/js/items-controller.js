@@ -173,7 +173,7 @@ var _getItemAt,
 	_checkForError = function (item, cleanUp) {
 		if (item.src && item.loadError && item.container) {
 			if (cleanUp) {
-				item.container.innerHTML = '';
+				framework.resetEl(item.container);
 			}
 
 			item.container.innerHTML = _options.errorMsg.replace('%url%', item.src);
@@ -348,7 +348,7 @@ _registerModule('Controller', {
 				img;
 
 			if (!item) {
-				holder.el.innerHTML = '';
+				framework.resetEl(holder.el);
 				return;
 			}
 
@@ -470,7 +470,7 @@ _registerModule('Controller', {
 				_applyZoomPanToItem(item);
 			}
 
-			holder.el.innerHTML = '';
+			framework.resetEl(holder.el);
 			holder.el.appendChild(baseDiv);
 		},
 

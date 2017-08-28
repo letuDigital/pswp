@@ -180,6 +180,9 @@ module.exports = function (grunt) {
 
     newContents +=
       '(function (root, factory) { \n' +
+      '\tif (root === undefined && window !== undefined) {\n' +
+      '\t\troot = window;\n' +
+      '\t}\n' +
       "\tif (typeof define === 'function' && define.amd) {\n" +
       '\t\tdefine(factory);\n' +
       "\t} else if (typeof exports === 'object') {\n" +

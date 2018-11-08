@@ -702,6 +702,18 @@
 			if (_options.counterEl) {
 				_indexIndicator.innerHTML = pswp.getCurrentIndex() + 1 + _options.indexIndicatorSep + _options.getNumItemsFn();
 			}
+			if (!_options.loop) {
+				if (pswp.getCurrentIndex() == 0) {
+					framework.addClass(_prevButton, 'pswp__element--disabled');
+				} else {
+					framework.removeClass(_prevButton, 'pswp__element--disabled');
+				}
+				if (pswp.getCurrentIndex() == _options.getNumItemsFn() - 1) {
+					framework.addClass(_nextButton, 'pswp__element--disabled');
+				} else {
+					framework.removeClass(_nextButton, 'pswp__element--disabled');
+				}
+			}
 		};
 
 		ui.onGlobalTap = function (e) {

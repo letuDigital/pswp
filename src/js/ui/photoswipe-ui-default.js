@@ -24,6 +24,8 @@
 			_captionContainer,
 			_fakeCaptionContainer,
 			_indexIndicator,
+			_prevButton,
+			_nextButton,
 			_shareButton,
 			_shareModal,
 			_shareModalHidden = true,
@@ -466,11 +468,17 @@
 			{
 				name: 'button--arrow--left',
 				option: 'arrowEl',
+				onInit: function (el) {
+					_prevButton = el;
+				},
 				onTap: pswp.prev
 			},
 			{
 				name: 'button--arrow--right',
 				option: 'arrowEl',
+				onInit: function (el) {
+					_nextButton = el;
+				},
 				onTap: pswp.next
 			},
 			{
@@ -701,6 +709,18 @@
 		ui.updateIndexIndicator = function () {
 			if (_options.counterEl) {
 				_indexIndicator.innerHTML = pswp.getCurrentIndex() + 1 + _options.indexIndicatorSep + _options.getNumItemsFn();
+			}
+			if (!_options.loop) {
+				if (pswp.getCurrentIndex() === 0) {
+					framework.addClass(_prevButton, 'pswp__element--disabled');
+				} else {
+					framework.removeClass(_prevButton, 'pswp__element--disabled');
+				}
+				if (pswp.getCurrentIndex() === _options.getNumItemsFn() - 1) {
+					framework.addClass(_nextButton, 'pswp__element--disabled');
+				} else {
+					framework.removeClass(_nextButton, 'pswp__element--disabled');
+				}
 			}
 		};
 

@@ -10,10 +10,11 @@ var tapTimer,
 	_dispatchTapEvent = function(origEvent, releasePoint, pointerType) {		
 		var e = document.createEvent( 'CustomEvent' ),
 			eDetail = {
-				origEvent:origEvent, 
-				target:origEvent.target, 
-				releasePoint: releasePoint, 
-				pointerType:pointerType || 'touch'
+				origEvent: origEvent,
+				pointerType: pointerType || 'touch',
+				releasePoint: releasePoint,
+				target: origEvent.target,
+				rightClick: pointerType === 'mouse' && origEvent.which === 3
 			};
 
 		e.initCustomEvent( 'pswpTap', true, true, eDetail );

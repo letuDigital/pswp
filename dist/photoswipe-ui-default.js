@@ -1,6 +1,6 @@
-/*! PhotoSwipe Default UI - 4.1.3 - 2019-10-17
+/*! PhotoSwipe Default UI - 4.1.3 - 2020-01-11
 * http://photoswipe.com
-* Copyright (c) 2019 Dmitry Semenov; */
+* Copyright (c) 2020 Dmitry Semenov; */
 /**
 *
 * UI on top of main sliding area (caption, arrows, close button, etc.).
@@ -460,7 +460,9 @@ var PhotoSwipeUI_Default =
 		{ 
 			name: 'button--close', 
 			option: 'closeEl',
-			onTap: pswp.close
+			onTap: function() {
+				setTimeout(pswp.close);
+			}
 		},
 		{ 
 			name: 'button--arrow--left', 

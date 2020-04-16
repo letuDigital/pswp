@@ -60,12 +60,13 @@ var PhotoSwipeUI_Default =
 			},
 
 			showCloseCtrl:true,
-			showCaption: true,
 			showFullscreenCtrl: true,
 			showZoomCtrl: true,
 			showShareCtrl: true,
 			showCounter: true,
 			showNextPreviousArrows: true,
+			showCaption: true,
+			verticalScrollForCaptions: false,
 
 			preloaderEl: true,
 			closeOnOutsideClick: true,
@@ -358,6 +359,7 @@ var PhotoSwipeUI_Default =
 			if( _fitControlsInViewport() ) {
 				
 				var bars = _options.barsSize; 
+
 				if(_options.showCaption && bars.bottom === 'auto') {
 					// Why is this fake caption container created with visibility:hidden
 					// and why only when bottom bar height is 'auto'?

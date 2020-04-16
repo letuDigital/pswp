@@ -59,13 +59,14 @@ var PhotoSwipeUI_Default =
 				return true;
 			},
 
-			closeEl:true,
-			captionEl: true,
-			fullscreenEl: true,
-			zoomEl: true,
-			shareEl: true,
-			counterEl: true,
-			arrowEl: true,
+			showCloseCtrl:true,
+			showCaption: true,
+			showFullscreenCtrl: true,
+			showZoomCtrl: true,
+			showShareCtrl: true,
+			showCounter: true,
+			showNextPreviousArrows: true,
+
 			preloaderEl: true,
 			closeOnOutsideClick: true,
 
@@ -357,7 +358,7 @@ var PhotoSwipeUI_Default =
 			if( _fitControlsInViewport() ) {
 				
 				var bars = _options.barsSize; 
-				if(_options.captionEl && bars.bottom === 'auto') {
+				if(_options.showCaption && bars.bottom === 'auto') {
 					// Why is this fake caption container created with visibility:hidden
 					// and why only when bottom bar height is 'auto'?
 					if(!_fakeCaptionContainer) {
@@ -438,14 +439,14 @@ var PhotoSwipeUI_Default =
 	var _uiElements = [
 		{ 
 			name: 'caption', 
-			option: 'captionEl',
+			option: 'showCaption',
 			onInit: function(el) {  
 				_captionContainer = el; 
 			} 
 		},
 		{ 
 			name: 'share-modal', 
-			option: 'shareEl',
+			option: 'showShareCtrl',
 			onInit: function(el) {  
 				_shareModal = el;
 			},
@@ -455,7 +456,7 @@ var PhotoSwipeUI_Default =
 		},
 		{ 
 			name: 'button--share', 
-			option: 'shareEl',
+			option: 'showShareCtrl',
 			onInit: function(el) { 
 				_shareButton = el;
 			},
@@ -465,36 +466,36 @@ var PhotoSwipeUI_Default =
 		},
 		{ 
 			name: 'button--zoom', 
-			option: 'zoomEl',
+			option: 'showZoomCtrl',
 			onTap: pswp.toggleDesktopZoom
 		},
 		{ 
 			name: 'counter', 
-			option: 'counterEl',
+			option: 'showCounter',
 			onInit: function(el) {  
 				_indexIndicator = el;
 			} 
 		},
 		{ 
 			name: 'button--close', 
-			option: 'closeEl',
+			option: 'showCloseCtrl',
 			onTap: function() {
 				setTimeout(pswp.close);
 			}
 		},
 		{ 
 			name: 'button--arrow--left', 
-			option: 'arrowEl',
+			option: 'showNextPreviousArrows',
 			onTap: pswp.prev
 		},
 		{ 
 			name: 'button--arrow--right', 
-			option: 'arrowEl',
+			option: 'showNextPreviousArrows',
 			onTap: pswp.next
 		},
 		{ 
 			name: 'button--fs', 
-			option: 'fullscreenEl',
+			option: 'showFullscreenCtrl',
 			onTap: function() {  
 				if(_fullscrenAPI.isFullscreen()) {
 					_fullscrenAPI.exit();
@@ -640,7 +641,7 @@ var PhotoSwipeUI_Default =
 
 		// clean up things when gallery is destroyed
 		_listen('destroy', function() {
-			if(_options.captionEl) {
+			if(_options.showCaption) {
 				if(_fakeCaptionContainer) {
 					_controls.removeChild(_fakeCaptionContainer);
 				}
@@ -696,7 +697,7 @@ var PhotoSwipeUI_Default =
 			
 			ui.updateIndexIndicator();
 
-			if(_options.captionEl) {
+			if(_options.showCaption) {
 				_options.addCaptionHTMLFn(pswp.currItem, _captionContainer);
 
 				_togglePswpClass(_captionContainer, 'caption--empty', !pswp.currItem.title);
@@ -730,7 +731,7 @@ var PhotoSwipeUI_Default =
 	};
 
 	ui.updateIndexIndicator = function() {
-		if(_options.counterEl) {
+		if(_options.showCounter) {
 			_indexIndicator.innerHTML = (pswp.getCurrentIndex()+1) + 
 										_options.indexIndicatorSep + 
 										_options.getNumItemsFn();

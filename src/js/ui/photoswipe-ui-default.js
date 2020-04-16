@@ -343,13 +343,12 @@ var PhotoSwipeUI_Default =
 				var bars = _options.barsSize; 
 				if(_options.captionEl && bars.bottom === 'auto') {
 					if(!_fakeCaptionContainer) {
-						_fakeCaptionContainer = framework.createEl('pswp__caption pswp__caption--fake');
-						_fakeCaptionContainer.appendChild( framework.createEl('pswp__caption__center') );
+						_fakeCaptionContainer = framework.createElement('pswp__caption pswp__caption--fake');
+						_fakeCaptionContainer.appendChild( framework.createElement('pswp__caption__center') );
 						_controls.insertBefore(_fakeCaptionContainer, _captionContainer);
 						framework.addClass(_controls, 'pswp__ui--fit');
 					}
 					if( _options.addCaptionHTMLFn(item, _fakeCaptionContainer, true) ) {
-
 						var captionSize = _fakeCaptionContainer.clientHeight;
 						gap.bottom = parseInt(captionSize,10) || 44;
 					} else {

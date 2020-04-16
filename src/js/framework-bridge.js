@@ -19,7 +19,7 @@ var framework = {
 	isArray: function(obj) {
 		return (obj instanceof Array);
 	},
-	createEl: function(classes, tag) {
+	createElement: function(classes, tag) {
 		var el = document.createElement(tag || 'div');
 		if(classes) {
 			el.className = classes;
@@ -125,7 +125,7 @@ var framework = {
 		if(framework.features) {
 			return framework.features;
 		}
-		var helperEl = framework.createEl(),
+		var helperEl = framework.createElement(),
 			helperStyle = helperEl.style,
 			vendor = '',
 			features = {};

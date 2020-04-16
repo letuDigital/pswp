@@ -150,7 +150,7 @@ var _getItemAt,
 	_preloadImage = function(item) {
 		item.loading = true;
 		item.loaded = false;
-		var img = item.img = framework.createEl('pswp__img', 'img');
+		var img = item.img = framework.createElement('pswp__img', 'img');
 		var onComplete = function() {
 			item.loading = false;
 			item.loaded = true;
@@ -347,7 +347,7 @@ _registerModule('Controller', {
 		allowProgressiveImg: function() {
 			// 1. Progressive image loading isn't working on webkit/blink 
 			//    when hw-acceleration (e.g. translateZ) is applied to IMG element.
-			//    That's why in PhotoSwipe parent element gets zoom transform, not image itself.
+			//    That's why in PhotoSwipe parent element (.pwsp__zoom-wrap) gets zoom transform, not image itself.
 			//    
 			// 2. Progressive image loading sometimes blinks in webkit/blink when applying animation to parent element.
 			//    That's why it's disabled on touch devices (mainly because of swipe transition)
@@ -385,7 +385,7 @@ _registerModule('Controller', {
 			holder.item = item;
 
 			// base container DIV is created only once for each of 3 holders
-			var baseDiv = item.container = framework.createEl('pswp__zoom-wrap'); 
+			var baseDiv = item.container = framework.createElement('pswp__zoom-wrap');
 
 			
 
@@ -423,6 +423,7 @@ _registerModule('Controller', {
 							}
 							return;
 						}
+
 						if( !item.imageAppended ) {
 							if(_features.transform && (_mainScrollAnimating || _initialZoomRunning) ) {
 								_imagesToAppendPool.push({
@@ -456,7 +457,7 @@ _registerModule('Controller', {
 					var placeholderClassName = 'pswp__img pswp__img--placeholder'; 
 					placeholderClassName += (item.msrc ? '' : ' pswp__img--placeholder--blank');
 
-					var placeholder = framework.createEl(placeholderClassName, item.msrc ? 'img' : '');
+					var placeholder = framework.createElement(placeholderClassName, item.msrc ? 'img' : '');
 					if(item.msrc) {
 						placeholder.src = item.msrc;
 					}
@@ -493,7 +494,7 @@ _registerModule('Controller', {
 				
 			} else if(item.src && !item.loadError) {
 				// image object is created every time, due to bugs of image loading & delay when switching images
-				img = framework.createEl('pswp__img', 'img');
+				img = framework.createElement('pswp__img', 'img');
 				img.style.opacity = 1;
 				img.src = item.src;
 				_setImageSize(item, img);

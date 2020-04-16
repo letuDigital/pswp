@@ -50,12 +50,12 @@ var PhotoSwipeUI_Default =
 			timeToIdleOutside: 1000,
 			loadingIndicatorDelay: 1000, // 2s
 			
-			addCaptionHTMLFn: function(item, captionEl /*, isFake */) {
+			addCaptionHTMLFn: function(item, captionElement /*, isFake */) {
 				if(!item.title) {
-					captionEl.children[0].innerHTML = '';
+					captionElement.children[0].innerHTML = '';
 					return false;
 				}
-				captionEl.children[0].innerHTML = item.title;
+				captionElement.children[0].innerHTML = item.title;
 				return true;
 			},
 

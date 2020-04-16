@@ -100,6 +100,7 @@ var _isOpen,
 	_windowVisibleSize = {},
 	_renderMaxResolution = false,
 	_orientationChangeTimeout,
+	_verticalScrollForCaptions = false,
 
 
 	// Registers PhotoSWipe module (History, Controller ...)

@@ -57,6 +57,7 @@
 
 				closeEl: true,
 				captionEl: true,
+				verticalScrollForCaptions: false,
 				fullscreenEl: true,
 				zoomEl: true,
 				shareEl: true,

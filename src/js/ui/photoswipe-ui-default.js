@@ -342,13 +342,16 @@ var PhotoSwipeUI_Default =
 				
 				var bars = _options.barsSize; 
 				if(_options.captionEl && bars.bottom === 'auto') {
+					// Why is this fake caption container create with visibility:hidden
+					// and why only when bottom bar height is 'auto'?
 					if(!_fakeCaptionContainer) {
 						_fakeCaptionContainer = framework.createElement('pswp__caption pswp__caption--fake');
 						_fakeCaptionContainer.appendChild( framework.createElement('pswp__caption__center') );
 						_controls.insertBefore(_fakeCaptionContainer, _captionContainer);
 						framework.addClass(_controls, 'pswp__ui--fit');
 					}
-					if( _options.addCaptionHTMLFn(item, _fakeCaptionContainer, true) ) {
+
+					if( _options.addCaptionHTMLFn(item, _fakeCaptionContainer /*, true */) ) {
 						var captionSize = _fakeCaptionContainer.clientHeight;
 						gap.bottom = parseInt(captionSize,10) || 44;
 					} else {

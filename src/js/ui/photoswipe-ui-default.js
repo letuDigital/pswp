@@ -46,12 +46,12 @@
 				timeToIdleOutside: 1000,
 				loadingIndicatorDelay: 1000, // 2s
 
-				addCaptionHTMLFn: function (item, captionEl /*, isFake */) {
+				addCaptionHTMLFn: function (item, captionElement /*, isFake */) {
 					if (!item.title) {
-						framework.resetEl(captionEl.firstChild);
+						framework.resetEl(captionElement.firstChild);
 						return false;
 					}
-					captionEl.children[0].innerHTML = item.title;
+					captionElement.children[0].innerHTML = item.title;
 					return true;
 				},
 

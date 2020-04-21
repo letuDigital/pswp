@@ -576,7 +576,7 @@ var publicMethods = {
 			self['init' + _modules[i]]();
 		}
 
-		// init
+		// Create new PhotoSwipeUI_Default object and run init
 		if(UiClass) {
 			var ui = self.ui = new UiClass(self, framework);
 			ui.init();

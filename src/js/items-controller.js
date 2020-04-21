@@ -63,7 +63,6 @@ var _getItemAt,
 				_shout('parseVerticalMargin', item);
 			}
 
-
 			_tempPanAreaSize.x = viewportSize.x;
 			_tempPanAreaSize.y = viewportSize.y - item.vGap.top - item.vGap.bottom;
 
@@ -390,7 +389,7 @@ _registerModule('Controller', {
 			var baseDiv = item.container = framework.createElement('pswp__zoom-wrap');
 
 			
-
+			// Insert HTML if that is specified instead of an image.
 			if(!item.src && item.html) {
 				if(item.html.tagName) {
 					baseDiv.appendChild(item.html);
@@ -468,16 +467,11 @@ _registerModule('Controller', {
 
 					baseDiv.appendChild(placeholder);
 					item.placeholder = placeholder;
-
 				}
-				
-
-				
 
 				if(!item.loading) {
 					_preloadImage(item);
 				}
-
 
 				if( self.allowProgressiveImg() ) {
 					// just append image

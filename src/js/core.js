@@ -775,9 +775,11 @@ var publicMethods = {
 
 		self.updateCurrItem();
 	},
+
 	next: function() {
 		self.goTo( parseInt(_currentItemIndex) + 1);
 	},
+
 	prev: function() {
 		self.goTo( parseInt(_currentItemIndex) - 1);
 	},
@@ -873,6 +875,7 @@ var publicMethods = {
 			_containerShiftIndex += _indexDiff + (_indexDiff > 0 ? -NUM_HOLDERS : NUM_HOLDERS);
 			diffAbs = NUM_HOLDERS;
 		}
+
 		for(var i = 0; i < diffAbs; i++) {
 			if(_indexDiff > 0) {
 				tempHolder = _itemHolders.shift();

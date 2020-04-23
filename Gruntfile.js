@@ -173,7 +173,6 @@ module.exports = function(grunt) {
       }
     }
 
-
   });
 
 
@@ -185,7 +184,8 @@ module.exports = function(grunt) {
         basePath = this.data.basePath,
         newContents = this.data.banner;
 
-    newContents += "(function (root, factory) { \n"+
+    newContents += "// Using UMD (Universal Module Definition) https://www.davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/\n" +
+    "(function (root, factory) { \n"+
       "\tif (typeof define === 'function' && define.amd) {\n" +
         "\t\tdefine(factory);\n" +
       "\t} else if (typeof exports === 'object') {\n" +

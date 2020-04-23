@@ -142,6 +142,7 @@
 	width: 70px;
 	height: 100px;
 	position: absolute;
+	z-index: 3;
 }
 
 .pswp__button--arrow--left {
@@ -333,6 +334,7 @@ a.pswp__share--download {
 
 .pswp__caption {
 	position: absolute;
+	z-index: 2;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -352,6 +354,53 @@ a.pswp__share--download {
 	padding: 20px 10px 10px 10px;
 	line-height: 20px;
 	color: #CCC;
+	background-color: #000;
+
+	a {
+		color: #CCC;
+	}
+	a:hover {
+		color: #FFF;
+	}
+}
+
+.pswp__button--caption--ctrl {
+	display: none;
+	width: 44px;
+	height: 44px;
+	background-image: none;
+	background-color: #000;
+	color: #999;
+	border-radius: 22px;
+	border: 1px solid #999;
+	overflow: hidden;
+	position: absolute;
+	top: -22px;
+	left: 50%;
+	transform: translateX(-50%);
+	text-decoration: none;
+	opacity: 1;
+}
+.pswp__button--caption--ctrl:hover {
+	color: #fff;
+	border-color: #fff;
+}
+.pswp__button--caption--ctrl.pswp__button--caption--ctrl--expand,
+.pswp__button--caption--ctrl.pswp__button--caption--ctrl--collapse {
+	display:block;
+}
+.pswp__button--caption--ctrl::before {
+	position: relative;
+	top: -8px;
+	left: 1px;
+	font-size: 42px;
+}
+
+.pswp__button--caption--ctrl--expand::before {
+	content: "\02b9d";
+}
+.pswp__button--caption--ctrl--collapse::before {
+	content: "\02b9f";
 }
 
 .pswp__caption--empty {
@@ -491,6 +540,7 @@ a.pswp__share--download {
 /* top black bar with buttons and "1 of X" indicator */
 .pswp__top-bar {
 	position: absolute;
+	z-index: 1;
 	left: 0;
 	top: 0;
 	height: 44px;

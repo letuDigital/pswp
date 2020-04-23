@@ -49,12 +49,28 @@
 				timeToIdleOutside: 1000,
 				loadingIndicatorDelay: 1000, // 2s
 
-			addCaptionHTMLFn: function(item, captionElement /*, isFake */) {
+				addCaptionHTMLFn: function(item, captionElement /*, isFake */) {
+					var innerCaptionElement = captionElement.querySelector(".pswp__caption__center");
 					if(!item.title) {
-						captionElement.children[0].innerHTML = '';
+						innerCaptionElement.innerHTML = '';
 						return false;
 					}
-					captionElement.children[0].innerHTML = item.title;
+					innerCaptionElement.innerHTML = item.title;
+
+					// If verticalScrollForCaption it true, position caption from top rather than bottom.
+					if(_options.verticalScrollForCaption) {
+						item.imageBottomAt = item.vGap.top + item.calculatedSize.y;
+						captionElement.style.bottom = 'auto';
+						captionElement.style.top = item.imageBottomAt + "px";
+
+						// Show the 'expand' control if caption extends out of view
+						if(innerCaptionElement.clientHeight > item.vGap.bottom) {
+							var captionCtrl = captionElement.querySelector(".pswp__caption__handle");
+							captionCtrl.classList.add("pswp__caption__handle--expand");
+							captionCtrl.addEventListener("click", toggleCaption.bind(null, item, captionElement, captionCtrl));
+						}
+					}
+
 					return true;
 				},
 
@@ -65,6 +81,7 @@
 				showCounter: true,
 				showNextPreviousArrows: true,
 				showCaption: true,
+				verticalScrollForCaption: true,
 
 				preloaderEl: true,
 
@@ -101,7 +118,31 @@
 			_blockControlsTap,
 			_blockControlsTapTimeout;
 
+		var toggleCaption = function(item, captionElement, captionCtrl) {
+			var innerCaptionElement = captionElement.querySelector(".pswp__caption__center");
 
+			if(captionCtrl.classList.contains("pswp__caption__handle--expand")){
+				var topAfterExpansion = item.vGap.top;
+				if(captionElement.clientHeight < item.calculatedSize.y + item.vGap.bottom) {
+					topAfterExpansion = item.vGap.top + item.vGap.bottom + (item.calculatedSize.y - captionElement.clientHeight);
+					captionElement.style.height = 'auto';
+				}
+				else {
+					innerCaptionElement.style.height =  item.calculatedSize.y + item.vGap.bottom  + "px";
+					innerCaptionElement.style.overflowY = "auto";
+				}
+
+				captionElement.style.top = topAfterExpansion + "px";
+				captionCtrl.classList.remove("pswp__caption__handle--expand");
+				captionCtrl.classList.add("pswp__caption__handle--collapse");
+			}
+			else {
+				innerCaptionElement.style.height = 'auto';
+				captionElement.style.top = (item.vGap.top + item.calculatedSize.y) + "px";
+				captionCtrl.classList.add("pswp__caption__handle--expand");
+				captionCtrl.classList.remove("pswp__caption__handle--collapse");
+			}
+		};
 
 		var _onControlsTap = function(e) {
 				if(_blockControlsTap) {
@@ -360,7 +401,7 @@
 
 					if(_options.showCaption && bars.bottom === 'auto') {
 						// The _fakeCaptionContainer allows the height of the caption to be determined and the leftover
-						// space is available for the image i.e. as the caption expands, the image above it shrinks.
+						// space is available for the image and top bar i.e. as the caption expands, the image above it shrinks.
 						if(!_fakeCaptionContainer) {
 							_fakeCaptionContainer = framework.createElement('pswp__caption pswp__caption--fake');
 							_fakeCaptionContainer.appendChild( framework.createElement('pswp__caption__center') );
@@ -368,7 +409,7 @@
 							framework.addClass(_controls, 'pswp__ui--fit');
 						}
 
-					if( _options.addCaptionHTMLFn(item, _fakeCaptionContainer /*, true */) ) {
+						if( _options.addCaptionHTMLFn(item, _fakeCaptionContainer /*, true */) ) {
 							var captionSize = _fakeCaptionContainer.clientHeight;
 							gap.bottom = parseInt(captionSize,10) || 44;
 						} else {

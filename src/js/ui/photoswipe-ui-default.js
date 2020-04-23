@@ -63,11 +63,16 @@
 						captionElement.style.bottom = 'auto';
 						captionElement.style.top = item.imageBottomAt + "px";
 
-						// Show the 'expand' control if caption extends out of view
+						// Show the 'expand' control if caption extends out of view. Reset height first.
+						innerCaptionElement.style.height = 'auto';
+						var captionCtrl = captionElement.querySelector(".pswp__button--caption--ctrl");
 						if(innerCaptionElement.clientHeight > item.vGap.bottom) {
-							var captionCtrl = captionElement.querySelector(".pswp__button--caption--ctrl");
 							captionCtrl.classList.add("pswp__button--caption--ctrl--expand");
 							captionCtrl.addEventListener("click", toggleCaption.bind(null, item, captionElement, captionCtrl));
+						}
+						else {
+							captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
+							captionCtrl.classList.remove("pswp__button--caption--ctrl--collapse");
 						}
 					}
 
@@ -125,7 +130,6 @@
 				var topAfterExpansion = item.vGap.top;
 				if(captionElement.clientHeight < item.calculatedSize.y + item.vGap.bottom) {
 					topAfterExpansion = item.vGap.top + item.vGap.bottom + (item.calculatedSize.y - captionElement.clientHeight);
-					captionElement.style.height = 'auto';
 				}
 				else {
 					innerCaptionElement.style.height =  item.calculatedSize.y + item.vGap.bottom  + "px";

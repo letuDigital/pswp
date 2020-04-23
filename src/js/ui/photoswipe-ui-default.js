@@ -47,11 +47,27 @@
 				loadingIndicatorDelay: 1000, // 2s
 
 				addCaptionHTMLFn: function (item, captionElement /*, isFake */) {
+					var innerCaptionElement = captionElement.querySelector('.pswp__caption__center');
 					if (!item.title) {
-						framework.resetEl(captionElement.firstChild);
+						innerCaptionElement.innerHTML = '';
 						return false;
 					}
-					captionElement.children[0].innerHTML = item.title;
+					innerCaptionElement.innerHTML = item.title;
+
+					// If verticalScrollForCaption it true, position caption from top rather than bottom.
+					if (_options.verticalScrollForCaption) {
+						item.imageBottomAt = item.vGap.top + item.calculatedSize.y;
+						captionElement.style.bottom = 'auto';
+						captionElement.style.top = item.imageBottomAt + 'px';
+
+						// Show the 'expand' control if caption extends out of view
+						if (innerCaptionElement.clientHeight > item.vGap.bottom) {
+							var captionCtrl = captionElement.querySelector('.pswp__caption__handle');
+							captionCtrl.classList.add('pswp__caption__handle--expand');
+							captionCtrl.addEventListener('click', toggleCaption.bind(null, item, captionElement, captionCtrl));
+						}
+					}
+
 					return true;
 				},
 
@@ -98,6 +114,30 @@
 			},
 			_blockControlsTap,
 			_blockControlsTapTimeout;
+
+		var toggleCaption = function (item, captionElement, captionCtrl) {
+			var innerCaptionElement = captionElement.querySelector('.pswp__caption__center');
+
+			if (captionCtrl.classList.contains('pswp__caption__handle--expand')) {
+				var topAfterExpansion = item.vGap.top;
+				if (captionElement.clientHeight < item.calculatedSize.y + item.vGap.bottom) {
+					topAfterExpansion = item.vGap.top + item.vGap.bottom + (item.calculatedSize.y - captionElement.clientHeight);
+					captionElement.style.height = 'auto';
+				} else {
+					innerCaptionElement.style.height = item.calculatedSize.y + item.vGap.bottom + 'px';
+					innerCaptionElement.style.overflowY = 'auto';
+				}
+
+				captionElement.style.top = topAfterExpansion + 'px';
+				captionCtrl.classList.remove('pswp__caption__handle--expand');
+				captionCtrl.classList.add('pswp__caption__handle--collapse');
+			} else {
+				innerCaptionElement.style.height = 'auto';
+				captionElement.style.top = item.vGap.top + item.calculatedSize.y + 'px';
+				captionCtrl.classList.add('pswp__caption__handle--expand');
+				captionCtrl.classList.remove('pswp__caption__handle--collapse');
+			}
+		};
 
 		var _onControlsTap = function (e) {
 				if (_blockControlsTap) {

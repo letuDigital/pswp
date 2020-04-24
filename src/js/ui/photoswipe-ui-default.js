@@ -56,16 +56,23 @@
 
 					// If verticalScrollForCaption it true, position caption from top rather than bottom.
 					if (_options.verticalScrollForCaption) {
-						item.imageBottomAt = item.vGap.top + item.calculatedSize.y;
+						var currentItemElement = captionElement
+							.closest('.pswp__scroll-wrap')
+							.querySelector('.pswp__container > .pswp__item:nth-child(2)');
+						var gapTop = parseInt(currentItemElement.dataset.topGap, 10);
+						var gapBottom = parseInt(currentItemElement.dataset.bottomGap, 10);
+						var imgInitialHeight = parseInt(currentItemElement.dataset.imageHeight, 10);
+						var imageBottomAt = gapTop + imgInitialHeight;
+
 						captionElement.style.bottom = 'auto';
-						captionElement.style.top = item.imageBottomAt + 'px';
+						captionElement.style.top = imageBottomAt + 'px';
 
 						// Show the 'expand' control if caption extends out of view. Reset height first.
 						innerCaptionElement.style.height = 'auto';
 						var captionCtrl = captionElement.querySelector('.pswp__button--caption--ctrl');
-						if (innerCaptionElement.clientHeight > item.vGap.bottom) {
+						if (innerCaptionElement.clientHeight > gapBottom) {
 							captionCtrl.classList.add('pswp__button--caption--ctrl--expand');
-							captionCtrl.addEventListener('click', toggleCaption.bind(null, item, captionElement, captionCtrl));
+							captionCtrl.addEventListener('click', toggleCaption);
 						} else {
 							captionCtrl.classList.remove('pswp__button--caption--ctrl--expand');
 							captionCtrl.classList.remove('pswp__button--caption--ctrl--collapse');
@@ -119,15 +126,23 @@
 			_blockControlsTap,
 			_blockControlsTapTimeout;
 
-		var toggleCaption = function (item, captionElement, captionCtrl) {
+		var toggleCaption = function (e) {
+			var captionCtrl = e.target || e.srcElement;
+			var captionElement = captionCtrl.parentNode;
 			var innerCaptionElement = captionElement.querySelector('.pswp__caption__center');
+			var currentItemElement = captionCtrl
+				.closest('.pswp__scroll-wrap')
+				.querySelector('.pswp__container > .pswp__item:nth-child(2)');
+			var gapTop = parseInt(currentItemElement.dataset.topGap, 10);
+			var gapBottom = parseInt(currentItemElement.dataset.bottomGap, 10);
+			var imgInitialHeight = parseInt(currentItemElement.dataset.imageHeight, 10);
 
 			if (captionCtrl.classList.contains('pswp__button--caption--ctrl--expand')) {
-				var topAfterExpansion = item.vGap.top;
-				if (captionElement.clientHeight < item.calculatedSize.y + item.vGap.bottom) {
-					topAfterExpansion = item.vGap.top + item.vGap.bottom + (item.calculatedSize.y - captionElement.clientHeight);
+				var topAfterExpansion = gapTop;
+				if (captionElement.clientHeight < imgInitialHeight + gapBottom) {
+					topAfterExpansion = gapTop + gapBottom + (imgInitialHeight - captionElement.clientHeight);
 				} else {
-					innerCaptionElement.style.height = item.calculatedSize.y + item.vGap.bottom + 'px';
+					innerCaptionElement.style.height = imgInitialHeight + gapBottom + 'px';
 					innerCaptionElement.style.overflowY = 'auto';
 				}
 
@@ -136,7 +151,7 @@
 				captionCtrl.classList.add('pswp__button--caption--ctrl--collapse');
 			} else {
 				innerCaptionElement.style.height = 'auto';
-				captionElement.style.top = item.vGap.top + item.calculatedSize.y + 'px';
+				captionElement.style.top = gapTop + imgInitialHeight + 'px';
 				captionCtrl.classList.add('pswp__button--caption--ctrl--expand');
 				captionCtrl.classList.remove('pswp__button--caption--ctrl--collapse');
 			}

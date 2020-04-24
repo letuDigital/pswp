@@ -183,10 +183,8 @@ var _getItemAt,
 			img = item.container.lastChild;
 		}
 
-		item.calculatedSize = {};
-
-		var w = (item.calculatedSize.x = maxRes ? item.w : Math.round(item.w * item.fitRatio)),
-			h = (item.calculatedSize.y = maxRes ? item.h : Math.round(item.h * item.fitRatio));
+		var w = maxRes ? item.w : Math.round(item.w * item.fitRatio),
+			h = maxRes ? item.h : Math.round(item.h * item.fitRatio);
 
 		// ensure correct aspect ratio
 		if (img.naturalHeight && img.naturalWidth) {
@@ -208,6 +206,10 @@ var _getItemAt,
 
 		img.style.width = w + 'px';
 		img.style.height = h + 'px';
+
+		img.dataset.initialHeight = h;
+
+		return {width: w, height: h};
 	},
 	_appendImagesPool = function () {
 		if (_imagesToAppendPool.length) {
@@ -341,7 +343,8 @@ _registerModule('Controller', {
 			}
 
 			var item = self.getItemAt(index),
-				img;
+				img,
+				imageSize;
 
 			if (!item) {
 				framework.resetEl(holder.el);
@@ -426,7 +429,7 @@ _registerModule('Controller', {
 						placeholder.src = item.msrc;
 					}
 
-					_setImageSize(item, placeholder);
+					imageSize = _setImageSize(item, placeholder);
 
 					baseDiv.appendChild(placeholder);
 					item.placeholder = placeholder;
@@ -455,7 +458,7 @@ _registerModule('Controller', {
 				img = framework.createElement('pswp__img', 'img');
 				img.style.opacity = 1;
 				img.src = item.src;
-				_setImageSize(item, img);
+				imageSize = _setImageSize(item, img);
 				_appendImage(index, item, baseDiv, img, true);
 			}
 
@@ -468,6 +471,10 @@ _registerModule('Controller', {
 
 			framework.resetEl(holder.el);
 			holder.el.appendChild(baseDiv);
+
+			holder.el.dataset.topGap = item.vGap.top;
+			holder.el.dataset.bottomGap = item.vGap.bottom;
+			holder.el.dataset.imageHeight = imageSize ? imageSize.height : '';
 		},
 
 		cleanSlide: function (item) {

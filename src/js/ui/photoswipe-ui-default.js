@@ -73,7 +73,7 @@
 						var captionCtrl = captionElement.querySelector(".pswp__button--caption--ctrl");
 						if(innerCaptionElement.clientHeight > gapBottom) {
 							captionCtrl.classList.add("pswp__button--caption--ctrl--expand");
-							captionCtrl.addEventListener("click", toggleCaption);
+							captionCtrl.addEventListener("click", _toggleCaption);
 						}
 						else {
 							captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
@@ -128,7 +128,7 @@
 			_blockControlsTap,
 			_blockControlsTapTimeout;
 
-		var toggleCaption = function(e) {
+		var _toggleCaption = function(e) {
 			var captionCtrl = e.target || e.srcElement;
 			var captionElement = captionCtrl.parentNode;
 			var innerCaptionElement = captionElement.querySelector(".pswp__caption__center");
@@ -559,6 +559,13 @@
 						_fullscrenAPI.enter();
 					}
 				}
+			},
+			{
+				name: 'button--caption--ctrl',
+				option: 'verticalScrollForCaption'/*,
+				onTap: function(evt) {
+					_toggleCaption(evt);
+				}*/
 			},
 			{
 				name: 'preloader',

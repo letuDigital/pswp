@@ -207,8 +207,6 @@ var _getItemAt,
 		img.style.width = w + 'px';
 		img.style.height = h + 'px';
 
-		img.dataset.initialHeight = h;
-
 		return {width: w, height: h};
 	},
 	_appendImagesPool = function () {
@@ -472,9 +470,10 @@ _registerModule('Controller', {
 			framework.resetEl(holder.el);
 			holder.el.appendChild(baseDiv);
 
-			holder.el.dataset.topGap = item.vGap.top;
-			holder.el.dataset.bottomGap = item.vGap.bottom;
-			holder.el.dataset.imageHeight = imageSize ? imageSize.height : '';
+			holder.el.dataset.viewportHeight = _viewportSize.y;
+			holder.el.dataset.gapTop = item.vGap.top;
+			holder.el.dataset.imagePositionTop = item.initialPosition.y;
+			holder.el.dataset.imageHeight = imageSize.height;
 		},
 
 		cleanSlide: function (item) {

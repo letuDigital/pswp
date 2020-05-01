@@ -189,6 +189,11 @@ var _isOpen,
 		_mainScrollPos.x = x;
 		_setTranslateX(x, _containerStyle);
 	},
+	_resetCaptionCtrl = function () {
+		var captionCtrl = self.scrollWrap.querySelector('.pswp__button--caption--ctrl');
+		captionCtrl.classList.remove('pswp__button--caption--ctrl--expand');
+		captionCtrl.classList.remove('pswp__button--caption--ctrl--collapse');
+	},
 	_calculatePanOffset = function (axis, zoomLevel) {
 		var m = _midZoomPoint[axis] - _offset[axis];
 		return _startPanOffset[axis] + _currPanDist[axis] + m - m * (zoomLevel / _startZoomLevel);
@@ -738,6 +743,8 @@ var publicMethods = {
 			_currPositionIndex -= diff;
 
 			_moveMainScroll(_slideSize.x * _currPositionIndex);
+
+			_resetCaptionCtrl();
 
 			_stopAllAnimations();
 			_mainScrollAnimating = false;

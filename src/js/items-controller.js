@@ -23,6 +23,7 @@ var _items,
 var _getItemAt,
 	_getNumItems,
 	_initialIsLoop,
+
 	_getZeroBounds = function() {
 		return {
 			center:{x:0,y:0}, 
@@ -30,6 +31,7 @@ var _getItemAt,
 			min:{x:0,y:0}
 		};
 	},
+
 	_calculateSingleItemPanBounds = function(item, realPanElementW, realPanElementH ) {
 		var bounds = item.bounds;
 
@@ -50,6 +52,7 @@ var _getItemAt,
 		bounds.min.x = (realPanElementW > _tempPanAreaSize.x) ? 0 : bounds.center.x;
 		bounds.min.y = (realPanElementH > _tempPanAreaSize.y) ? item.vGap.top : bounds.center.y;
 	},
+
 	_calculateItemSize = function(item, viewportSize, zoomLevel) {
 
 		if (item.src && !item.loadError) {
@@ -116,9 +119,6 @@ var _getItemAt,
 		
 	},
 
-	
-
-
 	_appendImage = function(index, item, baseDiv, img, preventAnimation, keepPlaceholder) {
 		
 
@@ -182,6 +182,7 @@ var _getItemAt,
 
 		return img;
 	},
+
 	_checkForError = function(item, cleanUp) {
 		if(item.src && item.loadError && item.container) {
 
@@ -194,6 +195,7 @@ var _getItemAt,
 			
 		}
 	},
+
 	_setImageSize = function(item, img, maxRes) {
 		if(!item.src) {
 			return;
@@ -425,10 +427,12 @@ _registerModule('Controller', {
 							item.loadComplete = item.img = null;
 							_calculateItemSize(item, _viewportSize);
 							_applyZoomPanToItem(item);
+							console.log("index: " + index + ", item.container.style.transform: " + item.container.style.transform);
 
 							if(holder.index === _currentItemIndex) {
 								// recalculate dimensions
 								self.updateCurrZoomItem();
+								console.log("index: " + index + ", item.container.style.transform: " + item.container.style.transform);
 							}
 							return;
 						}
@@ -505,10 +509,17 @@ _registerModule('Controller', {
 				_appendImage(index, item, baseDiv, img, true);
 			}
 			
-
+			var scale = 1;
 			if(!_initialContentSet && index === _currentItemIndex) {
 				_currZoomElementStyle = baseDiv.style;
 				_showOrHide(item, (img ||item.img) );
+
+				var cssTransform = baseDiv.style.transform; // e.g. "translate3d(65px, 87px, 0px) scale(0.875912)";
+				if(/^translate.*scale.*$/.test(cssTransform)) {
+                    var translateY = cssTransform.replace(/^translate(3d)?\([0-9]*px, /, "").replace(/px.*$/, "");
+					scale = cssTransform.replace(/^.*scale\(/, "").replace(/\)/, "");
+					console.log("scale: " + scale + ", image height: " + imageSize.height);
+                }
 			} else {
 				_applyZoomPanToItem(item);
 			}
@@ -519,7 +530,7 @@ _registerModule('Controller', {
 			holder.el.dataset.viewportHeight = _viewportSize.y;
 			holder.el.dataset.gapTop = item.vGap.top;
 			holder.el.dataset.imagePositionTop = item.initialPosition.y;
-			holder.el.dataset.imageHeight = imageSize.height;
+			holder.el.dataset.imageHeight = Math.round(imageSize.height * parseFloat(scale));
 		},
 
 		cleanSlide: function( item ) {
@@ -528,6 +539,5 @@ _registerModule('Controller', {
 			}
 			item.loaded = item.loading = item.img = item.imageAppended = false;
 		}
-
 	}
 });

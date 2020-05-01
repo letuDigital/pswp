@@ -69,7 +69,7 @@
 						var captionCtrl = captionElement.querySelector(".pswp__button--caption--ctrl");
 						if(innerCaptionElement.clientHeight > layoutData.captionInitialHeight) {
 							captionCtrl.classList.add("pswp__button--caption--ctrl--expand");
-							captionCtrl.addEventListener("click", _toggleCaption);
+							//captionCtrl.addEventListener("click", _toggleCaption);
 						}
 						else {
 							captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
@@ -142,8 +142,8 @@
 			return layoutData;
 		};
 
-		var _toggleCaption = function(e) {
-			var captionCtrl = e.target || e.srcElement;
+		var _toggleCaption = function(el) {
+			var captionCtrl = el; //e.target || e.srcElement;
 			var captionElement = captionCtrl.parentNode;
 			var innerCaptionElement = captionElement.querySelector(".pswp__caption__center");
 			var layoutData = _getLayoutData(captionElement);
@@ -176,7 +176,6 @@
 					return true;
 				}
 
-
 				e = e || window.event;
 
 				if(_options.timeToIdle && _options.mouseUsed && !_isIdle) {
@@ -193,9 +192,8 @@
 				for(var i = 0; i < _uiElements.length; i++) {
 					uiElement = _uiElements[i];
 					if(uiElement.onTap && clickedClass.indexOf('pswp__' + uiElement.name ) > -1 ) {
-						uiElement.onTap();
+						uiElement.onTap(target);
 						found = true;
-
 					}
 				}
 
@@ -574,10 +572,10 @@
 			},
 			{
 				name: 'button--caption--ctrl',
-				option: 'verticalScrollForCaption'/*,
-				onTap: function(evt) {
-					_toggleCaption(evt);
-				}*/
+				option: 'verticalScrollForCaption',
+				onTap: function(el) {
+					_toggleCaption(el);
+				}
 			},
 			{
 				name: 'preloader',

@@ -112,7 +112,7 @@ var _isOpen,
 		var numSlides = _getNumItems();
 		if(index > numSlides - 1) {
 			return index - numSlides;
-		} else  if(index < 0) {
+		} else if(index < 0) {
 			return numSlides + index;
 		}
 		return index;
@@ -126,6 +126,7 @@ var _isOpen,
 		}
 		return _listeners[name].push(fn);
 	},
+
 	_shout = function(name) {
 		var listeners = _listeners[name];
 
@@ -142,18 +143,20 @@ var _isOpen,
 	_getCurrentTime = function() {
 		return new Date().getTime();
 	},
+
 	_applyBgOpacity = function(opacity) {
 		_bgOpacity = opacity;
 		self.bg.style.opacity = opacity * _options.bgOpacity;
 	},
 
-	_applyZoomTransform = function(styleObj,x,y,zoom,item) {
+	_applyZoomTransform = function(styleObj, x, y, zoom, item) {
 		if(!_renderMaxResolution || (item && item !== self.currItem) ) {
 			zoom = zoom / (item ? item.fitRatio : self.currItem.fitRatio);
 		}
 
 		styleObj[_transformKey] = _translatePrefix + x + 'px, ' + y + 'px' + _translateSufix + ' scale(' + zoom + ')';
 	},
+
 	_applyCurrentZoomPan = function( allowRenderResolution ) {
 		if(_currZoomElementStyle && !self.currItem.loadError) {
 
@@ -171,10 +174,10 @@ var _isOpen,
 				}
 			}
 
-
 			_applyZoomTransform(_currZoomElementStyle, _panOffset.x, _panOffset.y, _currZoomLevel);
 		}
 	},
+
 	_applyZoomPanToItem = function(item) {
 		if(item.container) {
 
@@ -185,9 +188,11 @@ var _isOpen,
 								item);
 		}
 	},
+
 	_setTranslateX = function(x, elStyle) {
 		elStyle[_transformKey] = _translatePrefix + x + 'px, 0px' + _translateSufix;
 	},
+
 	_moveMainScroll = function(x, dragging) {
 
 		if(!_options.loop && dragging) {
@@ -203,6 +208,13 @@ var _isOpen,
 		_mainScrollPos.x = x;
 		_setTranslateX(x, _containerStyle);
 	},
+
+	_resetCaptionCtrl = function() {
+		var captionCtrl = self.scrollWrap.querySelector(".pswp__button--caption--ctrl");
+		captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
+		captionCtrl.classList.remove("pswp__button--caption--ctrl--collapse");
+	},
+
 	_calculatePanOffset = function(axis, zoomLevel) {
 		var m = _midZoomPoint[axis] - _offset[axis];
 		return _startPanOffset[axis] + _currPanDist[axis] + m - m * ( zoomLevel / _startZoomLevel );
@@ -215,6 +227,7 @@ var _isOpen,
 			p1.id = p2.id;
 		}
 	},
+
 	_roundPoint = function(p) {
 		p.x = Math.round(p.x);
 		p.y = Math.round(p.y);
@@ -286,6 +299,7 @@ var _isOpen,
 		}
 		return item.initialZoomLevel;
 	},
+
 	_getMaxZoomLevel = function(item) {
 		if(!item) {
 			item = self.currItem;
@@ -769,6 +783,7 @@ var publicMethods = {
 
 		_moveMainScroll(_slideSize.x * _currPositionIndex);
 
+		_resetCaptionCtrl();
 
 		_stopAllAnimations();
 		_mainScrollAnimating = false;

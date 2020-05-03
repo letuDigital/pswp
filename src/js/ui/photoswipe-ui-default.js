@@ -54,8 +54,14 @@
 					}
 					innerCaptionElement.innerHTML = item.title;
 
-					// If verticalScrollForCaption it true, position caption from top rather than bottom.
+					// If verticalScrollForCaption is true, position caption from top rather than bottom.
 					if (_options.verticalScrollForCaption) {
+						var imagePositionTop = item.initialPosition.y;
+						var apparentImageHeight = Math.round(item.h * item.initialZoomLevel);
+						var gapTop = item.vGap.top;
+						//var gapBottom = item.vGap.bottom;
+
+						_setLayoutData(captionElement, imagePositionTop, apparentImageHeight, gapTop);
 						var layoutData = _getLayoutData(captionElement);
 
 						captionElement.style.bottom = 'auto';
@@ -120,22 +126,22 @@
 			_blockControlsTap,
 			_blockControlsTapTimeout;
 
+		var _setLayoutData = function (captionElement, imagePositionTop, apparentImageHeight, gapTop, gapBottom) {
+			captionElement.dataset.imagePositionTop = imagePositionTop;
+			captionElement.dataset.apparentImageHeight = apparentImageHeight;
+			captionElement.dataset.gapTop = gapTop;
+		};
+
 		var _getLayoutData = function (captionElement) {
 			var layoutData = {};
-			//var toggleCtrlHeight = 36;
 
-			var currentItemElement = captionElement
-				.closest('.pswp__scroll-wrap')
-				.querySelector('.pswp__container > .pswp__item:nth-child(2)');
+			layoutData.gapTop = parseInt(captionElement.dataset.gapTop, 10);
+			layoutData.imagePositionTop = parseInt(captionElement.dataset.imagePositionTop, 10);
+			layoutData.apparentImageHeight = parseInt(captionElement.dataset.apparentImageHeight, 10);
 
-			layoutData.viewportHeight = parseInt(currentItemElement.dataset.viewportHeight, 10);
-			layoutData.gapTop = parseInt(currentItemElement.dataset.gapTop, 10);
-			layoutData.imagePositionTop = parseInt(currentItemElement.dataset.imagePositionTop, 10);
-			layoutData.imageHeight = parseInt(currentItemElement.dataset.imageHeight, 10);
-
-			layoutData.captionInitialPositionTop = layoutData.imagePositionTop + layoutData.imageHeight; // + toggleCtrlHeight/2 + 2;
-			layoutData.captionInitialHeight = layoutData.viewportHeight - layoutData.captionInitialPositionTop;
-			layoutData.captionMaxHeight = layoutData.viewportHeight - layoutData.gapTop;
+			layoutData.captionInitialPositionTop = layoutData.imagePositionTop + layoutData.apparentImageHeight;
+			layoutData.captionInitialHeight = window.innerHeight - layoutData.captionInitialPositionTop;
+			layoutData.captionMaxHeight = window.innerHeight - layoutData.gapTop;
 
 			return layoutData;
 		};
@@ -150,7 +156,7 @@
 				// Expand caption
 				if (captionElement.clientHeight < layoutData.captionMaxHeight) {
 					// It fits in space below top bar
-					captionElement.style.top = layoutData.captionMaxHeight - captionElement.clientHeight + 'px';
+					captionElement.style.top = window.innerHeight - captionElement.clientHeight + 'px';
 					innerCaptionElement.style.height = 'auto';
 				} else {
 					captionElement.style.top = layoutData.gapTop + 'px';

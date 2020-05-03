@@ -324,7 +324,13 @@ var _isOpen,
 			s.height = h + 'px';
 			s.left = item.initialPosition.x + 'px';
 			s.top = item.initialPosition.y + 'px';
+
+			console.log('This is _applyZoomPanToItem at line 355');
+			item.zoom = zoomRatio;
+			item.apparentImageHeight = h;
+			item.imageFromTop = item.initialPosition;
 		};
+
 		_applyCurrentZoomPan = function () {
 			if (_currZoomElementStyle) {
 				var s = _currZoomElementStyle,

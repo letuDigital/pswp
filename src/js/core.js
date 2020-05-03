@@ -345,6 +345,7 @@ var _isOpen,
 		_setTranslateX = function(x, elStyle) {
 			elStyle.left = x + 'px';
 		};
+
 		_applyZoomPanToItem = function(item) {
 
 			var zoomRatio = item.fitRatio > 1 ? 1 : item.fitRatio,
@@ -357,7 +358,12 @@ var _isOpen,
 			s.left = item.initialPosition.x + 'px';
 			s.top = item.initialPosition.y + 'px';
 
+			console.log("This is _applyZoomPanToItem at line 355");
+			item.zoom = zoomRatio;
+			item.apparentImageHeight = h;
+			item.imageFromTop = item.initialPosition;
 		};
+
 		_applyCurrentZoomPan = function() {
 			if(_currZoomElementStyle) {
 
@@ -369,7 +375,6 @@ var _isOpen,
 
 				s.width = w + 'px';
 				s.height = h + 'px';
-
 
 				s.left = _panOffset.x + 'px';
 				s.top = _panOffset.y + 'px';
@@ -952,8 +957,6 @@ var publicMethods = {
 			//template.style.width = _windowVisibleSize.x + 'px';
 			template.style.height = _windowVisibleSize.y + 'px';
 		}
-
-
 
 		_viewportSize.x = self.scrollWrap.clientWidth;
 		_viewportSize.y = self.scrollWrap.clientHeight;

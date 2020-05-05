@@ -62,7 +62,6 @@
 						var imagePositionTop = item.initialPosition.y;
 						var apparentImageHeight = Math.round(item.h * item.initialZoomLevel);
 						var gapTop = item.vGap.top;
-						//var gapBottom = item.vGap.bottom;
 
 						_setLayoutData(captionElement, imagePositionTop, apparentImageHeight, gapTop);
 						var layoutData = _getLayoutData(captionElement);
@@ -130,7 +129,7 @@
 			_blockControlsTap,
 			_blockControlsTapTimeout;
 
-		var _setLayoutData = function(captionElement, imagePositionTop, apparentImageHeight, gapTop, gapBottom){
+		var _setLayoutData = function(captionElement, imagePositionTop, apparentImageHeight, gapTop){
 			captionElement.dataset.imagePositionTop = imagePositionTop;
 			captionElement.dataset.apparentImageHeight = apparentImageHeight;
 			captionElement.dataset.gapTop = gapTop;
@@ -143,6 +142,7 @@
 			layoutData.imagePositionTop = parseInt(captionElement.dataset.imagePositionTop, 10);
 			layoutData.apparentImageHeight = parseInt(captionElement.dataset.apparentImageHeight, 10);
 
+			console.log("height: " + window.innerHeight);
 			layoutData.captionInitialPositionTop = layoutData.imagePositionTop + layoutData.apparentImageHeight;
 			layoutData.captionInitialHeight = window.innerHeight - layoutData.captionInitialPositionTop;
 			layoutData.captionMaxHeight = window.innerHeight - layoutData.gapTop;
@@ -158,10 +158,12 @@
 
 			if(captionCtrl.classList.contains("pswp__button--caption--ctrl--expand")) { // Expand caption
 				if(captionElement.clientHeight < layoutData.captionMaxHeight) { // It fits in space below top bar
+					console.log("caption height: "+ captionElement.clientHeight + ", space available: " + layoutData.captionMaxHeight);
 					captionElement.style.top = (window.innerHeight - captionElement.clientHeight)  + "px";
 					innerCaptionElement.style.height = 'auto';
 				}
 				else {
+					console.log("Caption won't fit. Gap at top: " + layoutData.gapTop);
 					captionElement.style.top = layoutData.gapTop  + "px";
 					innerCaptionElement.style.height =  layoutData.captionMaxHeight  + "px";
 					innerCaptionElement.style.overflowY = "auto";

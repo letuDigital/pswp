@@ -735,8 +735,8 @@ var publicMethods = {
 		framework.unbind(window, 'scroll', self);
 
 		_stopDragUpdateLoop();
-
 		_stopAllAnimations();
+		_resetCaptionCtrl();
 
 		_listeners = {};
 	},

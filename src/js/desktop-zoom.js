@@ -86,7 +86,10 @@ _registerModule('DesktopZoom', {
 			if (_currZoomLevel <= self.currItem.fitRatio) {
 				if (_options.modal) {
 					if (!_options.closeOnScroll || _numAnimations || _isDragging) {
-						e.preventDefault();
+						var source = e.target || e.srcElement;
+						if (!source.classList.contains('pswp__caption__center')) {
+							e.preventDefault();
+						}
 					} else if (_transformKey && Math.abs(e.deltaY) > 2) {
 						// close PhotoSwipe
 						// if browser supports transforms & scroll changed enough

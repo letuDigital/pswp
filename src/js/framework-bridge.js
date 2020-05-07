@@ -277,3 +277,21 @@ if (framework.features.oldIE) {
 		}
 	};
 }
+
+// Polyfill for closest() for IE11 from https://developer.mozilla.org/en-US/docs/Web/API/Element/closest.
+// Not bothering with versions older than 11 and it is debatable whether we should worry even about 11 now.
+if (!Element.prototype.matches) {
+	Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+}
+
+if (!Element.prototype.closest) {
+	Element.prototype.closest = function (s) {
+		var el = this;
+
+		do {
+			if (Element.prototype.matches.call(el, s)) return el;
+			el = el.parentElement || el.parentNode;
+		} while (el !== null && el.nodeType === 1);
+		return null;
+	};
+}

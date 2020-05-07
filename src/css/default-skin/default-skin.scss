@@ -142,7 +142,7 @@
 	width: 70px;
 	height: 100px;
 	position: absolute;
-	z-index: 3;
+	z-index: 1;
 }
 
 .pswp__button--arrow--left {
@@ -351,7 +351,7 @@ a.pswp__share--download {
 	max-width: 420px;
 	margin: 0 auto;
 	font-size: 13px;
-	padding: 20px 10px 10px 10px;
+	padding: 18px 10px 10px 10px;
 	line-height: 20px;
 	color: #FFF;
 	background-color: #000;
@@ -363,6 +363,10 @@ a.pswp__share--download {
 		color: #FFF;
 	}
 
+	p {
+		margin: 0 0 0 10px;
+	}
+
 	p:last-child::after {
 		display: inline-block;
 		height: 10px;
@@ -371,7 +375,6 @@ a.pswp__share--download {
 		margin-left: 6px;
 		margin-bottom: -1px;
 		content: ' ';
-
 	}
 }
 

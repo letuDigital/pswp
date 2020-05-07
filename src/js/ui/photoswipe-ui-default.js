@@ -72,9 +72,8 @@
 						// Show the 'expand' control only if caption extends out of view. Reset height first.
 						innerCaptionElement.style.height = 'auto';
 						var captionCtrl = captionElement.querySelector(".pswp__button--caption--ctrl");
-						if(innerCaptionElement.clientHeight > layoutData.captionInitialHeight) {
+						if(innerCaptionElement.clientHeight - 10 > layoutData.captionInitialHeight) {
 							captionCtrl.classList.add("pswp__button--caption--ctrl--expand");
-							//captionCtrl.addEventListener("click", _toggleCaption);
 						}
 						else {
 							captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
@@ -124,7 +123,6 @@
 
 				indexIndicatorSep: ' / ',
 				fitControlsWidth: 1200
-
 			},
 			_blockControlsTap,
 			_blockControlsTapTimeout;
@@ -158,12 +156,10 @@
 
 			if(captionCtrl.classList.contains("pswp__button--caption--ctrl--expand")) { // Expand caption
 				if(captionElement.clientHeight < layoutData.captionMaxHeight) { // It fits in space below top bar
-					console.log("caption height: "+ captionElement.clientHeight + ", space available: " + layoutData.captionMaxHeight);
 					captionElement.style.top = (window.innerHeight - captionElement.clientHeight)  + "px";
 					innerCaptionElement.style.height = 'auto';
 				}
 				else {
-					console.log("Caption won't fit. Gap at top: " + layoutData.gapTop);
 					captionElement.style.top = layoutData.gapTop  + "px";
 					innerCaptionElement.style.height =  layoutData.captionMaxHeight  + "px";
 					innerCaptionElement.style.overflowY = "auto";
@@ -228,7 +224,7 @@
 			},
 
 			_fitControlsInViewport = function() {
-				return !pswp.likelyTouchDevice || _options.mouseUsed || screen.width > _options.fitControlsWidth;
+				return !pswp.likelyTouchDevice || _options.mouseUsed || screen.width > _options.fitControlsWidth || _options.verticalScrollForCaption;
 			},
 
 			_togglePswpClass = function(el, cName, add) {
@@ -253,7 +249,6 @@
 			_toggleShareModal = function() {
 
 				_shareModalHidden = !_shareModalHidden;
-
 
 				if(!_shareModalHidden) {
 					_toggleShareModalClass();
@@ -479,6 +474,19 @@
 				}
 			},
 
+			_overrideOptionsIfVerticalScrollForCaptionsTrue = function() {
+				// Don't close gallery when tapping on caption
+				if(_options.verticalScrollForCaption) {
+					var index = _options.closeElClasses.indexOf('caption');
+					if (index > -1) {
+						_options.closeElClasses.splice(index, 1);
+					}
+				}
+
+				// Don't hide/show controls on tap
+				_options.tapToToggleControls = false;
+			},
+
 			_setupHidingControlsDuringGestures = function() {
 
 				// Hide controls on vertical drag
@@ -659,7 +667,7 @@
 			// create local link
 			_listen = pswp.listen;
 
-
+			_overrideOptionsIfVerticalScrollForCaptionsTrue();
 			_setupHidingControlsDuringGestures();
 
 			// update controls when slides change
@@ -852,8 +860,8 @@
 				}
 			} else {
 
-				// tap anywhere (except buttons) to toggle visibility of controls
-				if(_options.tapToToggleControls) {
+				// tap anywhere (except buttons and caption) to toggle visibility of controls
+				if(_options.tapToToggleControls && !target.classList.contains("pswp__caption__center")) {
 					if(_controlsVisible) {
 						ui.hideControls();
 					} else {
@@ -870,6 +878,7 @@
 
 			}
 		};
+
 		ui.onMouseOver = function(e) {
 			e = e || window.event;
 			var target = e.target || e.srcElement;
@@ -917,8 +926,6 @@
 					eventK: 'moz' + tF
 				};
 
-
-
 			} else if(dE.webkitRequestFullscreen) {
 				api = {
 					enterK: 'webkitRequestFullscreen',
@@ -948,13 +955,17 @@
 						return pswp.template[this.enterK]();
 					}
 				};
+
 				api.exit = function() {
 					_options.closeOnScroll = _initalCloseOnScrollValue;
 
 					return document[this.exitK]();
 
 				};
-				api.isFullscreen = function() { return document[this.elementK]; };
+
+				api.isFullscreen = function() {
+					return document[this.elementK];
+				};
 			}
 
 			return api;

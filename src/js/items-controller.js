@@ -509,25 +509,12 @@ _registerModule('Controller', {
 			if(!_initialContentSet && index === _currentItemIndex) {
 				_currZoomElementStyle = baseDiv.style;
 				_showOrHide(item, (img ||item.img) );
-
-				// var cssTransform = baseDiv.style.transform; // e.g. "translate3d(65px, 87px, 0px) scale(0.875912)";
-				// if(/^translate.*scale.*$/.test(cssTransform)) {
-                //     var translateY = cssTransform.replace(/^translate(3d)?\([0-9]*px, /, "").replace(/px.*$/, "");
-				// scale = cssTransform.replace(/^.*scale\(/, "").replace(/\)/, "");
-				// console.log("scale: " + scale + ", image height: " + imageSize.height);
-                // }
 			} else {
-				// console.log("Doing applyZoomPanToItem instead");
 				_applyZoomPanToItem(item);
 			}
 
 			holder.el.innerHTML = '';
 			holder.el.appendChild(baseDiv);
-
-			// holder.el.dataset.viewportHeight = _viewportSize.y;
-			// holder.el.dataset.gapTop = item.vGap.top;
-			// holder.el.dataset.imagePositionTop = item.initialPosition.y;
-			// holder.el.dataset.imageHeight = Math.round(imageSize.height * parseFloat(scale));
 		},
 
 		cleanSlide: function( item ) {

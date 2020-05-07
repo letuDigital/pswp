@@ -95,7 +95,11 @@ _registerModule('DesktopZoom', {
 
 					if (!_options.closeOnScroll || _numAnimations || _isDragging) {
 						var source = e.target || e.srcElement;
-						if(!source.classList.contains("pswp__caption__center")) {
+						if(source.classList.contains("pswp__caption__center")) {
+							if(source.class.contains("pswp__button--caption--ctrl--expand")) {
+								toggleCaption(source.parentNode);
+							}
+						} else {
 							e.preventDefault();
 						}
 					} else if(_transformKey && Math.abs(e.deltaY) > 2) {

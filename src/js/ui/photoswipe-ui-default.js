@@ -69,9 +69,8 @@
 						// Show the 'expand' control only if caption extends out of view. Reset height first.
 						innerCaptionElement.style.height = 'auto';
 						var captionCtrl = captionElement.querySelector('.pswp__button--caption--ctrl');
-						if (innerCaptionElement.clientHeight > layoutData.captionInitialHeight) {
+						if (innerCaptionElement.clientHeight - 10 > layoutData.captionInitialHeight) {
 							captionCtrl.classList.add('pswp__button--caption--ctrl--expand');
-							//captionCtrl.addEventListener("click", _toggleCaption);
 						} else {
 							captionCtrl.classList.remove('pswp__button--caption--ctrl--expand');
 							captionCtrl.classList.remove('pswp__button--caption--ctrl--collapse');
@@ -156,11 +155,9 @@
 				// Expand caption
 				if (captionElement.clientHeight < layoutData.captionMaxHeight) {
 					// It fits in space below top bar
-					console.log('caption height: ' + captionElement.clientHeight + ', space available: ' + layoutData.captionMaxHeight);
 					captionElement.style.top = window.innerHeight - captionElement.clientHeight + 'px';
 					innerCaptionElement.style.height = 'auto';
 				} else {
-					console.log("Caption won't fit. Gap at top: " + layoutData.gapTop);
 					captionElement.style.top = layoutData.gapTop + 'px';
 					innerCaptionElement.style.height = layoutData.captionMaxHeight + 'px';
 					innerCaptionElement.style.overflowY = 'auto';
@@ -222,7 +219,12 @@
 				}
 			},
 			_fitControlsInViewport = function () {
-				return !pswp.likelyTouchDevice || _options.mouseUsed || screen.width > _options.fitControlsWidth;
+				return (
+					!pswp.likelyTouchDevice ||
+					_options.mouseUsed ||
+					screen.width > _options.fitControlsWidth ||
+					_options.verticalScrollForCaption
+				);
 			},
 			_togglePswpClass = function (el, cName, add) {
 				framework[(add ? 'add' : 'remove') + 'Class'](el, 'pswp__' + cName);
@@ -462,6 +464,17 @@
 					});
 				}
 			},
+			_overrideOptionsIfVerticalScrollForCaptionsTrue = function () {
+				// Don't close gallery when tapping on caption
+				if (_options.verticalScrollForCaption) {
+					var index = _options.closeElClasses.indexOf('caption');
+					if (index > -1) {
+						_options.closeElClasses.splice(index, 1);
+					}
+				}
+				// Don't hide/show controls on tap
+				_options.tapToToggleControls = false;
+			},
 			_setupHidingControlsDuringGestures = function () {
 				// Hide controls on vertical drag
 				_listen('onVerticalDrag', function (now) {
@@ -643,6 +656,8 @@
 
 			// create local link
 			_listen = pswp.listen;
+
+			_overrideOptionsIfVerticalScrollForCaptionsTrue();
 
 			_setupHidingControlsDuringGestures();
 
@@ -842,8 +857,8 @@
 					}
 				}
 			} else {
-				// tap anywhere (except buttons) to toggle visibility of controls
-				if (_options.tapToToggleControls) {
+				// tap anywhere (except buttons and caption) to toggle visibility of controls
+				if (_options.tapToToggleControls && !target.classList.contains('pswp__caption__center')) {
 					if (_controlsVisible) {
 						ui.hideControls();
 					} else {

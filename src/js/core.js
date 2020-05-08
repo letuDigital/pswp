@@ -18,8 +18,8 @@ var _options = {
 	mouseUsed: false,
 	loop: true,
 	pinchToClose: true,
-	closeOnScroll: true,
-	closeOnVerticalDrag: true,
+	closeOnScroll: true,        // Will be overridden if allowLongCaptions is true
+	closeOnVerticalDrag: true,  // Will be overridden if allowLongCaptions is true
 	verticalDragRange: 0.75,
 	hideAnimationDuration: 333,
 	showAnimationDuration: 333,

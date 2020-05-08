@@ -49,6 +49,7 @@ var _gestureStartTime,
 	_opacityChanged,
 	_bgOpacity,
 	_wasOverInitialZoom,
+	_target,
 
 	_isEqualPoints = function(p1, p2) {
 		return p1.x === p2.x && p1.y === p2.y;
@@ -246,11 +247,7 @@ var _gestureStartTime,
 							newPanPos = newOffset;
 						}
 					}
-
 				}
-
-
-				//
 			}
 
 			if(axis === 'x') {
@@ -316,9 +313,9 @@ var _gestureStartTime,
 			e.preventDefault();
 		}
 
-
-
 		_shout('pointerDown');
+
+		_target = e.target || e.srcElement;
 
 		if(_pointerEventEnabled) {
 			var pointerIndex = framework.arraySearch(_currPointers, e.pointerId, 'id');
@@ -327,8 +324,6 @@ var _gestureStartTime,
 			}
 			_currPointers[pointerIndex] = {x:e.pageX, y:e.pageY, id: e.pointerId};
 		}
-		
-
 
 		var startPointsList = _getTouchPoints(e),
 			numPoints = startPointsList.length;
@@ -339,8 +334,6 @@ var _gestureStartTime,
 
 		// init drag
 		if(!_isDragging || numPoints === 1) {
-
-			
 
 			_isDragging = _isFirstMove = true;
 			framework.bind(window, _upMoveEvents, self);
@@ -380,7 +373,6 @@ var _gestureStartTime,
 			// Start rendering
 			_stopDragUpdateLoop();
 			_dragUpdateLoop();
-			
 		}
 
 		// init zoom
@@ -441,7 +433,7 @@ var _gestureStartTime,
 			}
 		}	
 	},
-	// 
+
 	_renderMovement =  function() {
 
 		if(!_currentPoints) {
@@ -550,6 +542,8 @@ var _gestureStartTime,
 				return;
 			}
 
+			// if dragging up on collapsed caption then open it.
+
 			if(_isFirstMove) {
 				_isFirstMove = false;
 
@@ -570,6 +564,16 @@ var _gestureStartTime,
 			// do nothing if pointers position hasn't changed
 			if(delta.x === 0 && delta.y === 0) {
 				return;
+			}
+
+			// if dragging up on a collapsed long caption, expand the caption
+			var targetCaption = _target.closest(".pswp__caption");
+			if(_direction === 'v' && delta.y > -DIRECTION_CHECK_OFFSET && targetCaption) {
+				var toggleCaptionBtn = targetCaption.querySelector(".pswp__button--caption--ctrl");
+				if(toggleCaptionBtn && toggleCaptionBtn.classList.contains("pswp__button--caption--ctrl--expand")) {
+					self.ui.toggleCaption(toggleCaptionBtn);
+					return;
+				}
 			}
 
 			if(_direction === 'v' && _options.closeOnVerticalDrag) {

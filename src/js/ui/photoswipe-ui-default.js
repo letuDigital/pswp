@@ -973,6 +973,10 @@
 
 			return api;
 		};
+
+		ui.toggleCaption = function(el) {
+			_toggleCaption(el);
+		};
 	};
 
 	return PhotoSwipeUI_Default;

@@ -57,8 +57,8 @@
 					}
 					innerCaptionElement.innerHTML = item.title;
 
-					// If verticalScrollForCaption is true, position caption from top rather than bottom.
-					if(_options.verticalScrollForCaption) {
+					// If allowLongCaptions is true, position caption from top rather than bottom.
+					if(_options.allowLongCaptions) {
 						var imagePositionTop = item.initialPosition.y;
 						var apparentImageHeight = Math.round(item.h * item.initialZoomLevel);
 						var gapTop = item.vGap.top;
@@ -91,7 +91,7 @@
 				showCounter: true,
 				showNextPreviousArrows: true,
 				showCaption: true,
-				verticalScrollForCaption: true,
+				allowLongCaptions: true,
 
 				preloaderEl: true,
 
@@ -228,7 +228,8 @@
 			},
 
 			_fitControlsInViewport = function() {
-				return !pswp.likelyTouchDevice || _options.mouseUsed || screen.width > _options.fitControlsWidth || _options.verticalScrollForCaption;
+				return !pswp.likelyTouchDevice || _options.mouseUsed || screen.width > _options.fitControlsWidth ||
+					_options.allowLongCaptions;
 			},
 
 			_togglePswpClass = function(el, cName, add) {
@@ -478,13 +479,14 @@
 				}
 			},
 
-			_overrideOptionsIfVerticalScrollForCaptionsTrue = function() {
-				// Don't close gallery when tapping on caption
-				if(_options.verticalScrollForCaption) {
-					var index = _options.closeElClasses.indexOf('caption');
-					if (index > -1) {
-						_options.closeElClasses.splice(index, 1);
-					}
+			_overrideOptionsIfAllowLongCaptionsTrue = function() {
+				if(_options.closeOnScroll) {
+					console.info("Resetting _options.closeOnScroll to false because _options.allowLongCaptions is true.");
+					_options.closeOnScroll = false;
+				}
+				if(_options.closeOnVerticalDrag) {
+					console.info("Resetting _options.closeOnVerticalDrag to false because _options.allowLongCaptions is true.");
+					_options.closeOnVerticalDrag = false;
 				}
 			},
 
@@ -591,7 +593,7 @@
 			},
 			{
 				name: 'button--caption--ctrl',
-				option: 'verticalScrollForCaption',
+				option: 'allowLongCaptions',
 				onTap: function(el) {
 					_toggleCaption(el);
 				}
@@ -668,7 +670,7 @@
 			// create local link
 			_listen = pswp.listen;
 
-			_overrideOptionsIfVerticalScrollForCaptionsTrue();
+			_overrideOptionsIfAllowLongCaptionsTrue();
 			_setupHidingControlsDuringGestures();
 
 			// update controls when slides change

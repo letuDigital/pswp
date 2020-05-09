@@ -83,17 +83,32 @@ _registerModule('DesktopZoom', {
 		},
 
 		handleMouseWheel: function (e) {
+			// If scrolling down on a collapsed long caption, expand the caption
+			var _target = e.target || e.srcElement;
+			var targetCaption = _target.closest('.pswp__caption');
+			if (targetCaption) {
+				var toggleCaptionBtn = targetCaption.querySelector('.pswp__button--caption--ctrl');
+				if (toggleCaptionBtn) {
+					if (toggleCaptionBtn.classList.contains('pswp__button--caption--ctrl--expand') && e.wheelDeltaY < -50) {
+						self.ui.toggleCaption(toggleCaptionBtn);
+					} else if (toggleCaptionBtn.classList.contains('pswp__button--caption--ctrl--collapse')) {
+						// Collapse the caption if scrolled to the top and user scrolls further
+						var innerCaptionElement = targetCaption.querySelector('.pswp__caption__center');
+						if (innerCaptionElement.scrollTop == 0 && e.wheelDeltaY > 50) {
+							self.ui.toggleCaption(toggleCaptionBtn);
+						}
+					} else {
+						e.preventDefault();
+					}
+
+					return;
+				}
+			}
+
 			if (_currZoomLevel <= self.currItem.fitRatio) {
 				if (_options.modal) {
 					if (!_options.closeOnScroll || _numAnimations || _isDragging) {
-						var source = e.target || e.srcElement;
-						if (source.classList.contains('pswp__caption__center')) {
-							if (source.class.contains('pswp__button--caption--ctrl--expand')) {
-								toggleCaption(source.parentNode);
-							}
-						} else {
-							e.preventDefault();
-						}
+						e.preventDefault();
 					} else if (_transformKey && Math.abs(e.deltaY) > 2) {
 						// close PhotoSwipe
 						// if browser supports transforms & scroll changed enough

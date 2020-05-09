@@ -1127,9 +1127,10 @@ _registerModule('Gestures', {
 			_downEvents = _dragStartEvent;
 
 			if(_pointerEventEnabled && !_likelyTouchDevice) {
+				// 'likely' - Windows 10 laptop with trackpad, TrackPoint and mouse but no touch support reports maxTouchPoints = 2.
 				_likelyTouchDevice = (navigator.maxTouchPoints > 1) || (navigator.msMaxTouchPoints > 1);
 			}
-			_likelyTouchDevice = false;
+
 			// make variable public
 			self.likelyTouchDevice = _likelyTouchDevice; 
 			

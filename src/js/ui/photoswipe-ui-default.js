@@ -91,7 +91,7 @@
 				showCounter: true,
 				showNextPreviousArrows: true,
 				showCaption: true,
-				allowLongCaptions: true,
+				allowLongCaptions: false,
 
 				preloaderEl: true,
 

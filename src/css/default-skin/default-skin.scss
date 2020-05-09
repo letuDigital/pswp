@@ -392,15 +392,11 @@ a.pswp__share--download {
 	transform: translateX(-50%);
 	text-decoration: none;
 	opacity: 1;
-
+	text-align: center;
 }
 
-.pswp__button--caption--ctrl.pswp__button--caption--ctrl--expand {
-	background: url('data:image/svg+xml;utf8,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm5.247 15l-5.247-6.44-5.263 6.44-.737-.678 6-7.322 6 7.335-.753.665z"/></svg>');
-}
-.pswp__button--caption--ctrl.pswp__button--caption--ctrl--collapse {
-	background: url('data:image/svg+xml;utf8,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm5.247 8l-5.247 6.44-5.263-6.44-.737.678 6 7.322 6-7.335-.753-.665z"/></svg>');
-}
+
+
 /* This must come after setting the background above */
 .pswp__button--caption--ctrl.pswp__button--caption--ctrl--expand,
 .pswp__button--caption--ctrl.pswp__button--caption--ctrl--collapse {
@@ -409,10 +405,76 @@ a.pswp__share--download {
 	height: 36px;
 	background-color: #ccc;
 	background-size: cover;
+	i {
+		position: relative;
+		background: transparent;
+		border: 5px solid transparent;
+	}
+	i:after,
+	i:before {
+		left: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+	i:before {
+		margin-left: -11px;
+	}
+	i:after {
+		margin-left: -8px;
+	}
 }
+.pswp__button--caption--ctrl.pswp__button--caption--ctrl--expand {
+	i {
+		top: -2px;
+	}
+	i:before,
+	i:after {
+		bottom: 0%;
+	}
+	i:before {
+		border-bottom-color: #000;
+		border-width: 11px 11px 13px 11px;
+	}
+	i:after {
+		border-bottom-color: #CCC;
+		border-width: 8px 8px 10px 8px;
+	}
+}
+.pswp__button--caption--ctrl.pswp__button--caption--ctrl--collapse {
+	i {
+		top: 2px;
+	}
+	i:before,
+	i:after {
+		top: 0%;
+	}
+	i:before {
+		border-top-color: #000;
+		border-width: 13px 11px 11px 11px;
+	}
+	i:after {
+		border-top-color: #CCC;
+		border-width: 10px 8px 8px 8px;
+	}
+}
+
 .pswp__button--caption--ctrl.pswp__button--caption--ctrl--expand:hover,
 .pswp__button--caption--ctrl.pswp__button--caption--ctrl--collapse:hover {
-	background-color: #fff;
+	background-color: #FFF;
+}
+.pswp__button--caption--ctrl.pswp__button--caption--ctrl--expand:hover {
+	i:after {
+		border-bottom-color: #FFF;
+	}
+}
+.pswp__button--caption--ctrl.pswp__button--caption--ctrl--collapse:hover {
+	i:after {
+		border-top-color: #FFF;
+	}
 }
 
 

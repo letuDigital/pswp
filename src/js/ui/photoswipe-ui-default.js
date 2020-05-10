@@ -166,6 +166,7 @@
 
 				captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
 				captionCtrl.classList.add("pswp__button--caption--ctrl--collapse");
+				captionCtrl.setAttribute("title", "Collapse caption");
 			}
 			else { // Collapse caption
 				innerCaptionElement.style.height = 'auto';
@@ -173,6 +174,7 @@
 
 				captionCtrl.classList.add("pswp__button--caption--ctrl--expand");
 				captionCtrl.classList.remove("pswp__button--caption--ctrl--collapse");
+				captionCtrl.setAttribute("title", "Expand caption");
 			}
 		};
 
@@ -608,6 +610,18 @@
 
 		];
 
+		var _ensureCaptionCtrlExists = function() {
+			// Ensure that there is a button to toggle the caption
+			var captionElement = document.querySelector(".pswp__caption");
+			if(!captionElement.querySelector(".pswp__button--caption--ctrl")) {
+				var btn = document.createElement("button");
+				var innerCaptionElement = captionElement.querySelector(".pswp__caption__center");
+				btn.setAttribute("class", "pswp__button pswp__button--caption--ctrl");
+				btn.setAttribute("title", "Expand caption");
+				captionElement.insertBefore(btn, innerCaptionElement);
+			}
+		};
+
 		var _setupUIElements = function() {
 			var item,
 				classAttr,
@@ -651,6 +665,8 @@
 			if(topBar) {
 				loopThroughChildElements( topBar.children );
 			}
+
+			_ensureCaptionCtrlExists();
 		};
 
 

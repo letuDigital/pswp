@@ -144,6 +144,14 @@
 	position: absolute;
 	z-index: 1;
 }
+/* Buttons should appear above expanded caption overlay if viewport wider than 540px as the
+the maximum width of the caption is 480px plus 30px each side. */
+@media only screen and (min-width: 540px) {
+	.pswp__button--arrow--left,
+	.pswp__button--arrow--right {
+		z-index: 3;
+	}
+}
 
 .pswp__button--arrow--left {
 	left: 0;

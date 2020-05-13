@@ -391,6 +391,10 @@ var _isOpen,
 				if(btnCaptionCtrl) {
 					if(btnCaptionCtrl.classList.contains("pswp__button--caption--ctrl--expand") ||
 					   btnCaptionCtrl.classList.contains("pswp__button--caption--ctrl--collapse")) {
+						// Add tabindex to the caption div so that it can take focus and be controlled by up/down arrows
+						var innerCaptionElement = btnCaptionCtrl.parentNode.querySelector(".pswp__caption__center");
+						innerCaptionElement.setAttribute("tabindex", "-1");
+						innerCaptionElement.focus();
 						keydownAction = 'toggleCaption';
 					}
 				}

@@ -694,7 +694,7 @@ var publicMethods = {
 
 		_stopDragUpdateLoop();
 		_stopAllAnimations();
-		self.ui.resetCaptionCtrl();
+		self.ui.resetCaption();
 
 		_listeners = {};
 	},
@@ -760,7 +760,7 @@ var publicMethods = {
 
 			_moveMainScroll(_slideSize.x * _currPositionIndex);
 
-			self.ui.resetCaptionCtrl();
+			self.ui.resetCaption();
 
 			_stopAllAnimations();
 			_mainScrollAnimating = false;

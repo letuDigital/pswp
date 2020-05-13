@@ -74,10 +74,11 @@
 						var captionCtrl = captionElement.querySelector(".pswp__button--caption--ctrl");
 						if(innerCaptionElement.clientHeight - 10 > layoutData.captionInitialHeight) {
 							captionCtrl.classList.add("pswp__button--caption--ctrl--expand");
+							captionCtrl.setAttribute("aria-controls", "pswp__caption__center");
+							innerCaptionElement.setAttribute("aria-expanded", "false");
 						}
 						else {
-							captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
-							captionCtrl.classList.remove("pswp__button--caption--ctrl--collapse");
+							_resetCaptionCtrl(captionCtrl);
 						}
 					}
 
@@ -147,13 +148,30 @@
 			return layoutData;
 		};
 
-		var _toggleCaption = function(el) {
-			var captionCtrl = el; //e.target || e.srcElement;
+		var _resetCaptionCtrl = function(captionCtrl) {
+			if(!captionCtrl) {
+				captionCtrl = pswp.scrollWrap.querySelector(".pswp__button--caption--ctrl");
+			}
+
+			captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
+			captionCtrl.classList.remove("pswp__button--caption--ctrl--collapse");
+			captionCtrl.removeAttribute("aria-controls");
+
+			var innerCaptionElement = captionCtrl.parentNode.querySelector(".pswp__caption__center");
+			innerCaptionElement.removeAttribute("aria-expanded");
+		};
+
+		var _toggleCaption = function(captionCtrl) {
+			if(!captionCtrl) {
+				captionCtrl = pswp.scrollWrap.querySelector(".pswp__button--caption--ctrl");
+			}
+
 			var captionElement = captionCtrl.parentNode;
 			var innerCaptionElement = captionElement.querySelector(".pswp__caption__center");
 			var layoutData = _getLayoutData(captionElement);
 
 			if(captionCtrl.classList.contains("pswp__button--caption--ctrl--expand")) { // Expand caption
+				console.log("expand caption");
 				if(captionElement.clientHeight < layoutData.captionMaxHeight) { // It fits in space below top bar
 					captionElement.style.top = (window.innerHeight - captionElement.clientHeight)  + "px";
 					innerCaptionElement.style.height = 'auto';
@@ -162,14 +180,21 @@
 					captionElement.style.top = layoutData.gapTop  + "px";
 					innerCaptionElement.style.height =  layoutData.captionMaxHeight  + "px";
 					innerCaptionElement.style.overflowY = "auto";
+					innerCaptionElement.focus();
+					console.log("innerCaptionElement should be focussed");
 				}
 
 				captionCtrl.classList.remove("pswp__button--caption--ctrl--expand");
 				captionCtrl.classList.add("pswp__button--caption--ctrl--collapse");
 				captionCtrl.setAttribute("title", "Collapse caption");
+
+				innerCaptionElement.setAttribute("aria-expanded", "true");
 			}
 			else { // Collapse caption
+				console.log("collapse caption");
 				innerCaptionElement.style.height = 'auto';
+				innerCaptionElement.setAttribute("aria-expanded", "false");
+
 				captionElement.style.top = layoutData.captionInitialPositionTop + "px";
 
 				captionCtrl.classList.add("pswp__button--caption--ctrl--expand");
@@ -992,6 +1017,10 @@
 
 		ui.toggleCaption = function(el) {
 			_toggleCaption(el);
+		};
+
+		ui.resetCaptionCtrl = function(el) {
+			_resetCaptionCtrl(el);
 		};
 	};
 

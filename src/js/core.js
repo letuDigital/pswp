@@ -189,11 +189,6 @@ var _isOpen,
 		_mainScrollPos.x = x;
 		_setTranslateX(x, _containerStyle);
 	},
-	_resetCaptionCtrl = function () {
-		var captionCtrl = self.scrollWrap.querySelector('.pswp__button--caption--ctrl');
-		captionCtrl.classList.remove('pswp__button--caption--ctrl--expand');
-		captionCtrl.classList.remove('pswp__button--caption--ctrl--collapse');
-	},
 	_calculatePanOffset = function (axis, zoomLevel) {
 		var m = _midZoomPoint[axis] - _offset[axis];
 		return _startPanOffset[axis] + _currPanDist[axis] + m - m * (zoomLevel / _startZoomLevel);
@@ -356,6 +351,17 @@ var _isOpen,
 				keydownAction = 'prev';
 			} else if (e.keyCode === 39) {
 				keydownAction = 'next';
+			} else if (e.keyCode === 13 || e.keyCode === 32) {
+				/* Enter or spacebar */
+				var btnCaptionCtrl = document.getElementById('pswp__button--caption--ctrl');
+				if (btnCaptionCtrl) {
+					if (
+						btnCaptionCtrl.classList.contains('pswp__button--caption--ctrl--expand') ||
+						btnCaptionCtrl.classList.contains('pswp__button--caption--ctrl--collapse')
+					) {
+						keydownAction = 'toggleCaption';
+					}
+				}
 			}
 		}
 
@@ -684,7 +690,7 @@ var publicMethods = {
 
 		_stopDragUpdateLoop();
 		_stopAllAnimations();
-		_resetCaptionCtrl();
+		self.ui.resetCaptionCtrl();
 
 		_listeners = {};
 	},
@@ -750,7 +756,7 @@ var publicMethods = {
 
 			_moveMainScroll(_slideSize.x * _currPositionIndex);
 
-			_resetCaptionCtrl();
+			self.ui.resetCaptionCtrl();
 
 			_stopAllAnimations();
 			_mainScrollAnimating = false;
@@ -807,6 +813,10 @@ var publicMethods = {
 
 		self.invalidateCurrItems();
 		self.updateSize(true);
+	},
+
+	toggleCaption: function (el) {
+		self.ui.toggleCaption(el);
 	},
 
 	// update current zoom/pan objects

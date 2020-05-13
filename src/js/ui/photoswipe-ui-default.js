@@ -561,7 +561,13 @@
 
 			};
 
-
+			// From https://davidwalsh.name/add-rules-stylesheets
+			var _createStylesheet = function() {
+				var style = document.createElement("style");
+				style.appendChild(document.createTextNode(""));
+				document.head.appendChild(style);
+				return style.sheet;
+			};
 
 		var _uiElements = [
 			{
@@ -835,12 +841,12 @@
 
 			_setupLoadingIndicator();
 
-			// Get handle on stylesheet - doesn't really matter which but I'll take default-skin.css
-			_stylesheet = document.styleSheets[1];
+			// Make a new stylesheet since there will be cross-site security issues if referencing a stylesheet on CDN
+			_stylesheet = _createStylesheet();
 
 			// From https://davidwalsh.name/add-rules-stylesheets
 			// We insert an empty rule just to create a new CSSStyleRule object. The second param is the index to
-			// insert at using the length property we effectively "append" the rule to the end of the sheet
+			// insert at using the length property we effectively "append" the rule to the end of the sheet.
 			var ruleExpandedIndex = _stylesheet.insertRule(".pswp__caption__center.expanded {}", _stylesheet.cssRules.length);
 			var ruleCollapsedIndex = _stylesheet.insertRule(".pswp__caption__center.collapsed {}", _stylesheet.cssRules.length);
 			_ruleExpanded = _stylesheet.cssRules.item(ruleExpandedIndex);

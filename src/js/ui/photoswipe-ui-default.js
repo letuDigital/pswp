@@ -169,7 +169,6 @@
 
 			if (captionCtrl.classList.contains('pswp__button--caption--ctrl--expand')) {
 				// Expand caption
-				console.log('expand caption');
 				if (captionElement.clientHeight < layoutData.captionMaxHeight) {
 					// It fits in space below top bar
 					captionElement.style.top = window.innerHeight - captionElement.clientHeight + 'px';
@@ -178,8 +177,6 @@
 					captionElement.style.top = layoutData.gapTop + 'px';
 					innerCaptionElement.style.height = layoutData.captionMaxHeight + 'px';
 					innerCaptionElement.style.overflowY = 'auto';
-					innerCaptionElement.focus();
-					console.log('innerCaptionElement should be focussed');
 				}
 
 				captionCtrl.classList.remove('pswp__button--caption--ctrl--expand');
@@ -189,7 +186,6 @@
 				innerCaptionElement.setAttribute('aria-expanded', 'true');
 			} else {
 				// Collapse caption
-				console.log('collapse caption');
 				innerCaptionElement.style.height = 'auto';
 				innerCaptionElement.setAttribute('aria-expanded', 'false');
 
@@ -636,6 +632,7 @@
 				var btn = document.createElement('button');
 				var innerCaptionElement = captionElement.querySelector('.pswp__caption__center');
 				btn.setAttribute('class', 'pswp__button pswp__button--caption--ctrl');
+				btn.setAttribute('id', 'pswp__button--caption--ctrl');
 				btn.setAttribute('title', 'Expand caption');
 				captionElement.insertBefore(btn, innerCaptionElement);
 			}

@@ -62,6 +62,8 @@
 						var imagePositionTop = item.initialPosition.y;
 						var apparentImageHeight = Math.round(item.h * item.initialZoomLevel);
 						var gapTop = item.vGap.top;
+
+						ui.resetCaption();
 						var naturalCaptionHeight = innerCaptionElement.clientHeight;
 
 						var captionCtrl = captionElement.querySelector('.pswp__button--caption--ctrl');
@@ -74,13 +76,13 @@
 							captionCtrl.classList.add('pswp__button--caption--ctrl--expand');
 							captionCtrl.setAttribute('aria-controls', 'pswp__caption__center');
 
-							innerCaptionElement.classList.add('collapsed');
 							innerCaptionElement.setAttribute('aria-expanded', 'false');
 						} else {
 							_resetCaption(captionCtrl);
 						}
 
 						_ruleCollapsed.style.height = layoutData.maxCollapsedCaptionHeight + 'px';
+						innerCaptionElement.classList.add('collapsed');
 					}
 
 					return true;

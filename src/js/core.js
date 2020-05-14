@@ -760,8 +760,6 @@ var publicMethods = {
 
 			_moveMainScroll(_slideSize.x * _currPositionIndex);
 
-			self.ui.resetCaption();
-
 			_stopAllAnimations();
 			_mainScrollAnimating = false;
 

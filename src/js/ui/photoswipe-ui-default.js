@@ -554,6 +554,23 @@
 			return style.sheet;
 		};
 
+		var _createStylesForLongCaptions = function () {
+			// Make a new stylesheet since there will be cross-site security issues if referencing a stylesheet on CDN
+			_stylesheet = _createStylesheet();
+
+			// From https://davidwalsh.name/add-rules-stylesheets
+			// We insert an empty rule just to create a new CSSStyleRule object. The second param is the index to
+			// insert at using the length property we effectively "append" the rule to the end of the sheet.
+			var ruleExpandedIndex = _stylesheet.insertRule('.pswp__caption__center.expanded {}', _stylesheet.cssRules.length);
+			var ruleCollapsedIndex = _stylesheet.insertRule('.pswp__caption__center.collapsed {}', _stylesheet.cssRules.length);
+			_ruleExpanded = _stylesheet.cssRules.item(ruleExpandedIndex);
+			_ruleCollapsed = _stylesheet.cssRules.item(ruleCollapsedIndex);
+
+			// While we are here, increase the width of the caption. It is very narrow which keeps it roughly centered
+			// if there are only a few words but it looks odd when the photo is wide and the caption is long.
+			_stylesheet.insertRule('.pswp__caption__center { width: 100%; max-width: 720px; }', _stylesheet.cssRules.length);
+		};
+
 		var _uiElements = [
 			{
 				name: 'caption',
@@ -831,16 +848,9 @@
 
 			_setupLoadingIndicator();
 
-			// Make a new stylesheet since there will be cross-site security issues if referencing a stylesheet on CDN
-			_stylesheet = _createStylesheet();
-
-			// From https://davidwalsh.name/add-rules-stylesheets
-			// We insert an empty rule just to create a new CSSStyleRule object. The second param is the index to
-			// insert at using the length property we effectively "append" the rule to the end of the sheet.
-			var ruleExpandedIndex = _stylesheet.insertRule('.pswp__caption__center.expanded {}', _stylesheet.cssRules.length);
-			var ruleCollapsedIndex = _stylesheet.insertRule('.pswp__caption__center.collapsed {}', _stylesheet.cssRules.length);
-			_ruleExpanded = _stylesheet.cssRules.item(ruleExpandedIndex);
-			_ruleCollapsed = _stylesheet.cssRules.item(ruleCollapsedIndex);
+			if (_options.allowLongCaptions) {
+				_createStylesForLongCaptions();
+			}
 		};
 
 		ui.setIdle = function (isIdle) {

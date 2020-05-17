@@ -352,7 +352,6 @@ var _isOpen,
 			s.left = item.initialPosition.x + 'px';
 			s.top = item.initialPosition.y + 'px';
 
-			console.log("This is _applyZoomPanToItem at line 355");
 			item.zoom = zoomRatio;
 			item.apparentImageHeight = h;
 			item.imageFromTop = item.initialPosition;

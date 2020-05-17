@@ -54,26 +54,31 @@ var _gestureStartTime,
 	_isEqualPoints = function(p1, p2) {
 		return p1.x === p2.x && p1.y === p2.y;
 	},
+
 	_isNearbyPoints = function(touch0, touch1) {
 		return Math.abs(touch0.x - touch1.x) < DOUBLE_TAP_RADIUS && Math.abs(touch0.y - touch1.y) < DOUBLE_TAP_RADIUS;
 	},
+
 	_calculatePointsDistance = function(p1, p2) {
 		_tempPoint.x = Math.abs( p1.x - p2.x );
 		_tempPoint.y = Math.abs( p1.y - p2.y );
 		return Math.sqrt(_tempPoint.x * _tempPoint.x + _tempPoint.y * _tempPoint.y);
 	},
+
 	_stopDragUpdateLoop = function() {
 		if(_dragAnimFrame) {
 			_cancelAF(_dragAnimFrame);
 			_dragAnimFrame = null;
 		}
 	},
+
 	_dragUpdateLoop = function() {
 		if(_isDragging) {
 			_dragAnimFrame = _requestAF(_dragUpdateLoop);
 			_renderMovement();
 		}
 	},
+
 	_canPan = function() {
 		return !(_options.scaleMode === 'fit' && _currZoomLevel ===  self.currItem.initialZoomLevel);
 	},
@@ -99,21 +104,23 @@ var _gestureStartTime,
 	_preventObj = {},
 	_preventDefaultEventBehaviour = function(e, isDown) {
 	    _preventObj.prevent = !_closestElement(e.target, _options.isClickableElement);
-
 		_shout('preventDragEvent', e, isDown, _preventObj);
 		return _preventObj.prevent;
 
 	},
+
 	_convertTouchToPoint = function(touch, p) {
 		p.x = touch.pageX;
 		p.y = touch.pageY;
 		p.id = touch.identifier;
 		return p;
 	},
+
 	_findCenterOfPoints = function(p1, p2, pCenter) {
 		pCenter.x = (p1.x + p2.x) * 0.5;
 		pCenter.y = (p1.y + p2.y) * 0.5;
 	},
+
 	_pushPosPoint = function(time, x, y) {
 		if(time - _gestureCheckSpeedTime > 50) {
 			var o = _posPoints.length > 2 ? _posPoints.shift() : {};
@@ -135,6 +142,7 @@ var _gestureStartTime,
 	_ePoint2 = {},
 	_tempPointsArr = [],
 	_tempCounter,
+
 	_getTouchPoints = function(e) {
 		// clean up previous points, without recreating array
 		while(_tempPointsArr.length > 0) {
@@ -337,6 +345,7 @@ var _gestureStartTime,
 
 			_isDragging = _isFirstMove = true;
 			framework.bind(window, _upMoveEvents, self);
+			// framework.bind(window, _downEvents, self); // I thought this might be needed to collapse caption but it made no difference.
 
 			_isZoomingIn = 
 				_wasOverInitialZoom = 
@@ -394,13 +403,10 @@ var _gestureStartTime,
 			_midZoomPoint.y = Math.abs(_currCenterPoint.y) - _panOffset.y;
 			_currPointsDistance = _startPointsDistance = _calculatePointsDistance(p, p2);
 		}
-
-
 	},
 
 	// Pointermove/touchmove/mousemove handler
 	_onDragMove = function(e) {
-
 		e.preventDefault();
 
 		if(_pointerEventEnabled) {
@@ -427,7 +433,6 @@ var _gestureStartTime,
 						_currentPoints = touchesList;
 					}
 				}
-				
 			} else {
 				_currentPoints = touchesList;
 			}
@@ -435,7 +440,6 @@ var _gestureStartTime,
 	},
 
 	_renderMovement =  function() {
-
 		if(!_currentPoints) {
 			return;
 		}
@@ -537,18 +541,14 @@ var _gestureStartTime,
 		} else {
 
 			// handle behaviour for one point (dragging or panning)
-
 			if(!_direction) {
 				return;
 			}
-
-			// if dragging up on collapsed caption then open it.
 
 			if(_isFirstMove) {
 				_isFirstMove = false;
 
 				// subtract drag distance that was used during the detection direction  
-
 				if( Math.abs(delta.x) >= DIRECTION_CHECK_OFFSET) {
 					delta.x -= _currentPoints[0].x - _startPoint.x;
 				}
@@ -566,15 +566,29 @@ var _gestureStartTime,
 				return;
 			}
 
-			// if dragging up on a collapsed long caption, expand the caption
-			var targetCaption = _target.closest(".pswp__caption");
-			if(_direction === 'v' && delta.y > -DIRECTION_CHECK_OFFSET && targetCaption) {
-				var toggleCaptionBtn = targetCaption.querySelector(".pswp__button--caption--ctrl");
-				if(toggleCaptionBtn && toggleCaptionBtn.classList.contains("pswp__button--caption--ctrl--expand")) {
-					self.ui.toggleCaption(toggleCaptionBtn);
-					return;
+			/* **************************************************************
+			 Commenting this section out because it does not work reliably
+			 especially when swiping down in an attempt to close the caption.
+			 I'd be grateful if anyone can figure out why and fix it.
+			*****************************************************************
+			// If dragging up on a collapsed long caption, expand the caption;
+			// If dragging down on expanded long caption when at the top, collapse the caption.
+			if(_direction === 'v' && _options.allowLongCaptions) {
+				var targetCaption = _target.closest(".pswp__caption");
+				if(targetCaption) {
+					var toggleCaptionBtn = targetCaption.querySelector(".pswp__button--caption--ctrl");
+					var isExpanded = toggleCaptionBtn.classList.contains("pswp__button--caption--ctrl--collapse");
+					var isCollapsed = toggleCaptionBtn.classList.contains("pswp__button--caption--ctrl--expand");
+					var innerCaptionElement = targetCaption.querySelector(".pswp__caption__center");
+
+					if((delta.y < -DIRECTION_CHECK_OFFSET && isCollapsed) ||
+					   (delta.y > DIRECTION_CHECK_OFFSET && isExpanded && innerCaptionElement.scrollTop === 0)) {
+						self.ui.toggleCaption(toggleCaptionBtn);
+						return;
+					}
 				}
 			}
+			*/
 
 			if(_direction === 'v' && _options.closeOnVerticalDrag) {
 				if(!_canPan()) {
@@ -611,7 +625,6 @@ var _gestureStartTime,
 	
 	// Pointerup/pointercancel/touchend/touchcancel/mouseup event handler
 	_onDragRelease = function(e) {
-
 		if(_features.isOldAndroid ) {
 
 			if(_oldAndroidTouchEndTimeout && e.type === 'mouseup') {
@@ -703,6 +716,7 @@ var _gestureStartTime,
 		if(numPoints === 0) {
 			_isDragging = false;
 			framework.unbind(window, _upMoveEvents, self);
+			// framework.unbind(window, _downEvents, self); // I thought this might be needed to collapse caption but it made no difference.
 
 			_stopDragUpdateLoop();
 

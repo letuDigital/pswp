@@ -380,12 +380,9 @@ _registerModule('Controller', {
 							item.loadComplete = item.img = null;
 							_calculateItemSize(item, _viewportSize);
 							_applyZoomPanToItem(item);
-							console.log('index: ' + index + ', item.container.style.transform: ' + item.container.style.transform);
-
 							if (holder.index === _currentItemIndex) {
 								// recalculate dimensions
 								self.updateCurrZoomItem();
-								console.log('index: ' + index + ', item.container.style.transform: ' + item.container.style.transform);
 							}
 							return;
 						}

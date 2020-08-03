@@ -12,6 +12,26 @@ JavaScript image gallery for mobile and desktop.
 - Bower `bower install photoswipe`.
 - [Yarn](https://yarnpkg.com/en/package/photoswipe) `yarn add photoswipe`.
 
+### Extras merged into this fork
+
+- [dimsemenov/PhotoSwipe#1642](https://github.com/dimsemenov/PhotoSwipe/pull/1642)
+- [dimsemenov/PhotoSwipe#1628](https://github.com/dimsemenov/PhotoSwipe/pull/1628)
+- [dimsemenov/PhotoSwipe#1633](https://github.com/dimsemenov/PhotoSwipe/pull/1633)
+- [dimsemenov/PhotoSwipe#1635](https://github.com/dimsemenov/PhotoSwipe/pull/1635)
+- [dimsemenov/PhotoSwipe#1638](https://github.com/dimsemenov/PhotoSwipe/pull/1638)
+- [dimsemenov/PhotoSwipe#1639](https://github.com/dimsemenov/PhotoSwipe/pull/1639)
+- [dimsemenov/PhotoSwipe#1573](https://github.com/dimsemenov/PhotoSwipe/pull/1573)
+- [dimsemenov/PhotoSwipe#1572](https://github.com/dimsemenov/PhotoSwipe/pull/1572)
+- [dimsemenov/PhotoSwipe#1611](https://github.com/dimsemenov/PhotoSwipe/pull/1611)
+- [dimsemenov/PhotoSwipe#1488](https://github.com/dimsemenov/PhotoSwipe/pull/1488)
+- [dimsemenov/PhotoSwipe#1516](https://github.com/dimsemenov/PhotoSwipe/pull/1516)
+- [dimsemenov/PhotoSwipe#1520](https://github.com/dimsemenov/PhotoSwipe/pull/1520)
+- [dimsemenov/PhotoSwipe#1497](https://github.com/dimsemenov/PhotoSwipe/pull/1497)
+- [dimsemenov/PhotoSwipe#1489](https://github.com/dimsemenov/PhotoSwipe/pull/1489)
+- [dimsemenov/PhotoSwipe#1694](https://github.com/dimsemenov/PhotoSwipe/pull/1694)
+- [dimsemenov/PhotoSwipe#1702](https://github.com/dimsemenov/PhotoSwipe/pull/1702)
+- Partially [dimsemenov/PhotoSwipe#1687](https://github.com/dimsemenov/PhotoSwipe/pull/1687)
+
 ## Location of files
 
 - Compiled PhotoSwipe JS and CSS files, SVG and PNG sprites are in the [dist/](https://github.com/dimsemenov/PhotoSwipe/tree/master/dist) folder.

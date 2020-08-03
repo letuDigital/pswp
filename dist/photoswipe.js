@@ -1,6 +1,6 @@
-/*! PhotoSwipe - v4.1.3 - 2019-10-17
+/*! PhotoSwipe - v4.1.4 - 2020-08-03
 * http://photoswipe.com
-* Copyright (c) 2019 Dmitry Semenov; */
+* Copyright (c) 2020 Dmitry Semenov; */
 (function (root, factory) { 
 	if (typeof define === 'function' && define.amd) {
 		define(factory);
@@ -453,7 +453,7 @@ var _isOpen,
 		styleObj[_transformKey] = _translatePrefix + x + 'px, ' + y + 'px' + _translateSufix + ' scale(' + zoom + ')';
 	},
 	_applyCurrentZoomPan = function( allowRenderResolution ) {
-		if(_currZoomElementStyle) {
+		if(_currZoomElementStyle && !self.currItem.loadError) {
 
 			if(allowRenderResolution) {
 				if(_currZoomLevel > self.currItem.fitRatio) {
@@ -1017,7 +1017,7 @@ var publicMethods = {
 
 		_stopAllAnimations();
 
-		_listeners = null;
+		_listeners = {};
 	},
 
 	/**
@@ -1074,10 +1074,10 @@ var publicMethods = {
 		self.updateCurrItem();
 	},
 	next: function() {
-		self.goTo( _currentItemIndex + 1);
+		self.goTo( parseInt(_currentItemIndex) + 1);
 	},
 	prev: function() {
-		self.goTo( _currentItemIndex - 1);
+		self.goTo( parseInt(_currentItemIndex) - 1);
 	},
 
 	setItems: function(items) {
@@ -1674,7 +1674,7 @@ var _gestureStartTime,
 		// 
 		// http://www.quirksmode.org/js/events_properties.html
 		// https://developer.mozilla.org/en-US/docs/Web/API/event.button
-		if(e.type === 'mousedown' && e.button > 0  ) {
+		if(e.type === 'mousedown' && (e.button > 0 || e.buttons === 0)) {
 			return;
 		}
 
@@ -2575,11 +2575,11 @@ var _showOrHideTimeout,
 					img.style.display = 'block';
 				}
 				framework.addClass(template, 'pswp--animated-in');
-				_shout('initialZoom' + (out ? 'OutEnd' : 'InEnd'));
 			} else {
 				self.template.removeAttribute('style');
 				self.bg.removeAttribute('style');
 			}
+			_shout('initialZoom' + (out ? 'OutEnd' : 'InEnd'));
 
 			if(completeFn) {
 				completeFn();
@@ -2874,6 +2874,14 @@ var _getItemAt,
 		var onComplete = function() {
 			item.loading = false;
 			item.loaded = true;
+			
+			// set natural image size
+			if(item.autoSize) {
+				item.w = img.naturalWidth;
+				item.h = img.naturalHeight;
+				item.autoSize = false;
+				self.updateSize();
+			}
 
 			if(item.loadComplete) {
 				item.loadComplete(item);
@@ -2916,6 +2924,19 @@ var _getItemAt,
 
 		var w = maxRes ? item.w : Math.round(item.w * item.fitRatio),
 			h = maxRes ? item.h : Math.round(item.h * item.fitRatio);
+		
+		// ensure correct aspect ratio
+		if(img.naturalHeight && img.naturalWidth) {
+			var newHeight = w * (img.naturalHeight / img.naturalWidth);
+			if(newHeight > h) {
+				var newWidth = h * (img.naturalWidth / img.naturalHeight);
+				img.style.marginLeft = (w - newWidth) / 2 + 'px';
+				w = newWidth;
+			} else {
+				img.style.marginTop = (h - newHeight) / 2 + 'px';
+				h = newHeight;
+			}
+		}
 		
 		if(item.placeholder && !item.loaded) {
 			item.placeholder.style.width = w + 'px';
@@ -3029,7 +3050,12 @@ _registerModule('Controller', {
 
 		getItemAt: function(index) {
 			if (index >= 0) {
-				return _items[index] !== undefined ? _items[index] : false;
+				var item = _items[index] !== undefined ? _items[index] : false;
+				if(item && item.autoSize) {
+					if(item.w == null) item.w = 0;
+					if(item.h == null) item.h = 0;
+				}
+				return item;
 			}
 			return false;
 		},
@@ -3211,6 +3237,7 @@ _registerModule('Controller', {
 
 	}
 });
+
 
 /*>>items-controller*/
 

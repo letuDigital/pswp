@@ -14,23 +14,41 @@ JavaScript image gallery for mobile and desktop.
 
 ### Extras merged into this fork
 
-- [dimsemenov/PhotoSwipe#1642](https://github.com/dimsemenov/PhotoSwipe/pull/1642)
+- [dimsemenov/PhotoSwipe#1642](https://github.com/dimsemenov/PhotoSwipe/pull/1642) 
+  suppressing incorrect mousedown in case of firefox android where PointerEvent not enabled by default
 - [dimsemenov/PhotoSwipe#1628](https://github.com/dimsemenov/PhotoSwipe/pull/1628)
+  Fix [#1608](https://github.com/dimsemenov/PhotoSwipe/issues/1608): Overlapped Div Gets Clicked When Closing Pswp From UI Toolbar
 - [dimsemenov/PhotoSwipe#1633](https://github.com/dimsemenov/PhotoSwipe/pull/1633)
+  Fix the problem which out var is always "InEnd"
 - [dimsemenov/PhotoSwipe#1635](https://github.com/dimsemenov/PhotoSwipe/pull/1635)
+  Fix missing type="button" in doc
 - [dimsemenov/PhotoSwipe#1638](https://github.com/dimsemenov/PhotoSwipe/pull/1638)
+  Adding `type` attribute to `button` tags to avoid form submitting
 - [dimsemenov/PhotoSwipe#1639](https://github.com/dimsemenov/PhotoSwipe/pull/1639)
+  Adding HTML code between <figure> elements (This could close: [#1380](https://github.com/dimsemenov/PhotoSwipe/issues/1380))
 - [dimsemenov/PhotoSwipe#1573](https://github.com/dimsemenov/PhotoSwipe/pull/1573)
+  When the image loaded error,it should not set image size
 - [dimsemenov/PhotoSwipe#1572](https://github.com/dimsemenov/PhotoSwipe/pull/1572)
+  Fix [#1390](https://github.com/dimsemenov/PhotoSwipe/issues/1390): 'TypeError Cannot read property 'updateScrollOffset' of null'
 - [dimsemenov/PhotoSwipe#1611](https://github.com/dimsemenov/PhotoSwipe/pull/1611)
+  deletes double rule and merges selector
 - [dimsemenov/PhotoSwipe#1488](https://github.com/dimsemenov/PhotoSwipe/pull/1488)
+  Ensure correct image aspect ratio
 - [dimsemenov/PhotoSwipe#1516](https://github.com/dimsemenov/PhotoSwipe/pull/1516)
+  it may be more logic if the class `pswp__caption__center` align the text to center instead of left
 - [dimsemenov/PhotoSwipe#1520](https://github.com/dimsemenov/PhotoSwipe/pull/1520)
+  using parseInt() to be sure the _currentItemIndex is interpreted as an integer and the increment and decrements are numbers and not string
 - [dimsemenov/PhotoSwipe#1497](https://github.com/dimsemenov/PhotoSwipe/pull/1497)
+  Add Yarn install
 - [dimsemenov/PhotoSwipe#1489](https://github.com/dimsemenov/PhotoSwipe/pull/1489)
+  Fix example: Added msrc to get the thumbnail to animate
 - [dimsemenov/PhotoSwipe#1694](https://github.com/dimsemenov/PhotoSwipe/pull/1694)
+  Init from DOM – click handler defers to Anchor elements
 - [dimsemenov/PhotoSwipe#1702](https://github.com/dimsemenov/PhotoSwipe/pull/1702)
+  Automatically detect image width and height after loading
 - Partially [dimsemenov/PhotoSwipe#1687](https://github.com/dimsemenov/PhotoSwipe/pull/1687)
+  Change markdown processor to kramdown.
+
 
 ## Location of files
 

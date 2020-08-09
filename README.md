@@ -48,6 +48,8 @@ JavaScript image gallery for mobile and desktop.
   Automatically detect image width and height after loading
 - Partially [dimsemenov/PhotoSwipe#1687](https://github.com/dimsemenov/PhotoSwipe/pull/1687)
   Change markdown processor to kramdown.
+- [dmxforce/PhotoSwipe#2](https://github.com/dmxforce/PhotoSwipe/pull/2)
+  Fixing right click bug and removing minified dist files for now.
 
 
 ## Location of files

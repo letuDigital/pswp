@@ -70,6 +70,7 @@ var PhotoSwipeUI_Default =
 			counterEl: true,
 			arrowEl: true,
 			preloaderEl: true,
+			closeOnOutsideClick: true,
 
 			tapToClose: false,
 			tapToToggleControls: true,
@@ -733,7 +734,7 @@ var PhotoSwipeUI_Default =
 			if (!e.detail.rightClick) {
 
 				// close gallery if clicked outside of the image
-				if(_hasCloseClass(target)) {
+				if(_options.closeOnOutsideClick && _hasCloseClass(target)) {
 					pswp.close();
 					return;
 				}
@@ -762,7 +763,7 @@ var PhotoSwipeUI_Default =
 			}
 
 			// tap to close gallery
-			if(_options.tapToClose && (framework.hasClass(target, 'pswp__img') || _hasCloseClass(target)) ) {
+			if(_options.tapToClose && (framework.hasClass(target, 'pswp__img') || _options.closeOnOutsideClick && _hasCloseClass(target)) ) {
 				pswp.close();
 				return;
 			}

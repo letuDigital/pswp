@@ -347,6 +347,9 @@ counterEl: true,
 arrowEl: true,
 preloaderEl: true,
 
+// close gallery if clicked outside of the image
+closeOnOutsideClick: true,
+
 // Tap on sliding area should close gallery
 tapToClose: false,
 

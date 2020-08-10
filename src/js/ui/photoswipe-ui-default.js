@@ -760,7 +760,8 @@ var PhotoSwipeUI_Default =
 			}
 
 			// tap to close gallery
-			if(_options.tapToClose && (framework.hasClass(target, 'pswp__img') || _options.closeOnOutsideClick && _hasCloseClass(target)) ) {
+			if(_options.tapToClose && (framework.hasClass(target, 'pswp__img') ||
+			   _options.closeOnOutsideClick && _hasCloseClass(target)) ) {
 				pswp.close();
 				return;
 			}

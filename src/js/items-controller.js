@@ -332,8 +332,12 @@ _registerModule('Controller', {
 			if (index >= 0) {
 				var item = _items[index] !== undefined ? _items[index] : false;
 				if(item && item.autoSize) {
-					if(item.w == null) item.w = 0;
-					if(item.h == null) item.h = 0;
+					if(item.w == null) {
+						item.w = 0;
+					}
+					if(item.h == null) {
+						item.h = 0;
+					}
 				}
 				return item;
 			}

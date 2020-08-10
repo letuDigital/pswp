@@ -1,8 +1,7 @@
 # PhotoSwipe Repository 
 
-[![Build Status](https://travis-ci.org/dimsemenov/PhotoSwipe.svg)](https://travis-ci.org/dimsemenov/PhotoSwipe) 
-[![devDependency Status](https://david-dm.org/dimsemenov/PhotoSwipe/dev-status.svg)](https://david-dm.org/dimsemenov/PhotoSwipe#info=devDependencies)
-[![Flattr](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/3698358/dimsemenovPhotoSwipe-on-GitHub)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/andreasblaesius)
+
 
 JavaScript image gallery for mobile and desktop. 
 
@@ -54,10 +53,10 @@ JavaScript image gallery for mobile and desktop.
 
 ## Location of files
 
-- Compiled PhotoSwipe JS and CSS files, SVG and PNG sprites are in the [dist/](https://github.com/dimsemenov/PhotoSwipe/tree/master/dist) folder.
-- Source files (.JS and .SCSS) are in the [src/](https://github.com/dimsemenov/PhotoSwipe/tree/master/src) folder.  Note that PhotoSwipe uses Autoprefixer when compiling SASS files.
-- Demo website is in the [website/](https://github.com/dimsemenov/PhotoSwipe/tree/master/website) folder.
-- Documentation markdown files are in [website/documentation/](https://github.com/dimsemenov/PhotoSwipe/tree/master/website/documentation).
+- Compiled PhotoSwipe JS and CSS files, SVG and PNG sprites are in the [dist/](https://github.com/andi34/PhotoSwipe/tree/master/dist) folder.
+- Source files (.JS and .SCSS) are in the [src/](https://github.com/andi34/PhotoSwipe/tree/master/src) folder.  Note that PhotoSwipe uses Autoprefixer when compiling SASS files.
+- Demo website is in the [website/](https://github.com/andi34/PhotoSwipe/tree/master/website) folder.
+- Documentation markdown files are in [website/documentation/](https://github.com/andi34/PhotoSwipe/tree/master/website/documentation).
 
 ## Plugins / extensions / addons
 
@@ -81,7 +80,7 @@ To compile PhotoSwipe by yourself, make sure that you have [Node.js](http://node
 
 1) Clone the repository
 
-	git clone https://github.com/dimsemenov/PhotoSwipe.git
+	git clone https://github.com/andi34/PhotoSwipe.git
 
 2) Go inside the PhotoSwipe folder that you fetched and install Node dependencies
 

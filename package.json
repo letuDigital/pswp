@@ -7,8 +7,8 @@
   "scripts": {
     "build": "grunt",
     "prettier": "npm-run-all --serial prettier:*",
-    "prettier:js": "prettier src/js/*.js --write",
-    "prettier:css": "prettier src/css/*.scss --write",
+    "prettier:js": "prettier src/js/{,*/**/}*.js --write",
+    "prettier:css": "prettier src/css/{,*/**/}*.scss --write",
     "test": "grunt jshint"
   },
   "devDependencies": {

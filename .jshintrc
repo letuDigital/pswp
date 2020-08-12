@@ -17,7 +17,6 @@
   "undef": true,
   "unused": true,
   "node": true,
-  "maxlen": 140,
 
   "predef": [
     "define",

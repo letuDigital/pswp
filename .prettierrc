@@ -3,15 +3,5 @@
   "singleQuote": false,
   "bracketSpacing": false,
   "printWidth": 140,
-  "useTabs": true,
-  "overrides": [
-    {
-      "files": "src/css/**/*.scss",
-      "options": {
-          "useTabs": true,
-          "tabWidth": 1,
-          "singleQuote": true
-      }
-    }
-  ]
+  "useTabs": true
 }

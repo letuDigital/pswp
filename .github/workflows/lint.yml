@@ -1,0 +1,24 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'dist/js/**.js'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'dist/js/**.js'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: yarn install
+    - name: Lint
+      run: yarn test

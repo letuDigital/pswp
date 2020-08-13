@@ -261,25 +261,8 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('format', ['prettier:unformatted_files']);
-  grunt.registerTask('default', [
-    'sass',
-    'autoprefixer',
-    'pswpbuild',
-    'prettier:unformatted_files',
-    'uglify',
-    'copy',
-    'jekyll:dev'
-  ]);
-  grunt.registerTask('production', [
-    'sass',
-    'autoprefixer',
-    'pswpbuild',
-    'uglify',
-    'prettier:unformatted_files',
-    'copy',
-    'cssmin',
-    'jekyll:production'
-  ]);
-  grunt.registerTask('nosite', ['sass', 'autoprefixer', 'pswpbuild', 'uglify', 'prettier:unformatted_files']);
+  grunt.registerTask('default', ['sass', 'autoprefixer', 'pswpbuild', 'uglify', 'copy', 'jekyll:dev']);
+  grunt.registerTask('production', ['sass', 'autoprefixer', 'pswpbuild', 'uglify', 'copy', 'cssmin', 'jekyll:production']);
+  grunt.registerTask('nosite', ['sass', 'autoprefixer', 'pswpbuild', 'uglify']);
   grunt.registerTask('hint', ['jshint']);
 };

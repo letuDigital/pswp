@@ -10,6 +10,7 @@
     "prettier:js": "prettier src/js/{,*/**/}*.js --write",
     "prettier:css": "prettier src/css/{,*/**/}*.scss --write",
     "prettier:gruntfile": "prettier Gruntfile.js --write",
+    "prettier:dist": "prettier --write 'dist/{photoswipe,photoswipe-ui-default}.js'",
     "test": "grunt jshint"
   },
   "devDependencies": {

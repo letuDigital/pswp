@@ -168,6 +168,16 @@ module.exports = function (grunt) {
           'src/css/default-skin/default-skin.svg': 'src/css/default-skin/default-skin.svg'
         }
       }
+    },
+
+    prettier: {
+      options: {
+        configFile: '.gulpprettierrc',
+        progress: true
+      },
+      unformatted_files: {
+        src: ['dist/photoswipe-ui-default.js', 'dist/photoswipe.js']
+      }
     }
   });
 
@@ -247,11 +257,29 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-jekyll');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-svgmin');
+  grunt.loadNpmTasks('grunt-prettier');
 
   // Default task.
-  grunt.registerTask('default', ['sass', 'autoprefixer', 'pswpbuild', 'uglify', 'copy', 'jekyll:dev']);
-
-  grunt.registerTask('production', ['sass', 'autoprefixer', 'pswpbuild', 'uglify', 'copy', 'cssmin', 'jekyll:production']);
-  grunt.registerTask('nosite', ['sass', 'autoprefixer', 'pswpbuild', 'uglify']);
+  grunt.registerTask('format', ['prettier:unformatted_files']);
+  grunt.registerTask('default', [
+    'sass',
+    'autoprefixer',
+    'pswpbuild',
+    'prettier:unformatted_files',
+    'uglify',
+    'copy',
+    'jekyll:dev'
+  ]);
+  grunt.registerTask('production', [
+    'sass',
+    'autoprefixer',
+    'pswpbuild',
+    'uglify',
+    'prettier:unformatted_files',
+    'copy',
+    'cssmin',
+    'jekyll:production'
+  ]);
+  grunt.registerTask('nosite', ['sass', 'autoprefixer', 'pswpbuild', 'uglify', 'prettier:unformatted_files']);
   grunt.registerTask('hint', ['jshint']);
 };

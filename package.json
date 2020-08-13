@@ -9,6 +9,7 @@
     "prettier": "npm-run-all --serial prettier:*",
     "prettier:js": "prettier src/js/{,*/**/}*.js --write",
     "prettier:css": "prettier src/css/{,*/**/}*.scss --write",
+    "prettier:gruntfile": "prettier Gruntfile.js --write",
     "test": "grunt jshint"
   },
   "devDependencies": {

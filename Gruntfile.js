@@ -29,15 +29,19 @@ module.exports = function(grunt) {
 
     pkg: grunt.file.readJSON('photoswipe.json'),
 
-    banner: '/*! PhotoSwipe - v<%= pkg.version %> - ' +
+    banner: '/*!\n' +
+      ' * PhotoSwipe - v<%= pkg.version %> - ' +
       '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>; */\n',
+      '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
+      ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;\n' +
+      ' */\n\n',
 
-    defaultUIBanner:  '/*! PhotoSwipe Default UI - <%= pkg.version %> - ' +
+    defaultUIBanner:  '/*!\n' +
+      ' * PhotoSwipe Default UI - <%= pkg.version %> - ' +
       '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>; */\n',
+      '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
+      ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;\n' +
+      ' */\n\n',
 
     // Task configuration.
     clean: {

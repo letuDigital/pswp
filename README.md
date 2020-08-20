@@ -49,6 +49,22 @@ JavaScript image gallery for mobile and desktop.
   Change markdown processor to kramdown.
 - [dmxforce/PhotoSwipe#2](https://github.com/dmxforce/PhotoSwipe/pull/2)
   Fixing right click bug and removing minified dist files for now.
+- [dimsemenov/PhotoSwipe#1557](https://github.com/dimsemenov/PhotoSwipe/pull/1557)
+  Indefinite article is added for dummy captions
+- [dimsemenov/PhotoSwipe#1563](https://github.com/dimsemenov/PhotoSwipe/pull/1563)
+  Fix closing when thumbnail bounds are unknown
+- [dimsemenov/PhotoSwipe#1585](https://github.com/dimsemenov/PhotoSwipe/pull/1585)
+  Fix screen zooming on touch devices when share option selected.
+- [dimsemenov/PhotoSwipe#1476](https://github.com/dimsemenov/PhotoSwipe/pull/1476)
+  [UI] Added Download Button
+- [dimsemenov/PhotoSwipe#1472](https://github.com/dimsemenov/PhotoSwipe/pull/1472)
+  [UI] Tap/click show next image if non zoomable
+- [dimsemenov/PhotoSwipe#1397](https://github.com/dimsemenov/PhotoSwipe/pull/1397)
+  Feature: Extended the barsSize option to add space around the fullscreen image
+- [dimsemenov/PhotoSwipe#1309](https://github.com/dimsemenov/PhotoSwipe/pull/1309)
+  Remove html contents more gracefully
+- [dimsemenov/PhotoSwipe#1413](https://github.com/dimsemenov/PhotoSwipe/pull/1413)
+  define root in strict mode for browsers
 
 
 ## Location of files

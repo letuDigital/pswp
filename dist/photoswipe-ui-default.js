@@ -1,6 +1,9 @@
-/*! PhotoSwipe Default UI - 4.1.4 - 2020-08-12
-* http://photoswipe.com
-* Copyright (c) 2020 Dmitry Semenov; */
+/*!
+ * PhotoSwipe Default UI - 4.1.4 - 2020-08-20
+ * http://photoswipe.com
+ * Copyright (c) 2020 Dmitry Semenov;
+ */
+
 /**
  *
  * UI on top of main sliding area (caption, arrows, close button, etc.).
@@ -30,6 +33,7 @@
 			_shareButton,
 			_shareModal,
 			_shareModalHidden = true,
+			_downloadButton,
 			_initalCloseOnScrollValue,
 			_isIdle,
 			_listen,
@@ -47,7 +51,7 @@
 
 				addCaptionHTMLFn: function (item, captionEl /*, isFake */) {
 					if (!item.title) {
-						captionEl.children[0].innerHTML = '';
+						framework.resetEl(captionEl.firstChild);
 						return false;
 					}
 					captionEl.children[0].innerHTML = item.title;
@@ -59,6 +63,7 @@
 				fullscreenEl: true,
 				zoomEl: true,
 				shareEl: true,
+				downloadEl: true,
 				counterEl: true,
 				arrowEl: true,
 				preloaderEl: true,
@@ -68,6 +73,7 @@
 				tapToToggleControls: true,
 
 				clickToCloseNonZoomable: true,
+				clickToShowNextNonZoomable: false,
 
 				shareButtons: [
 					{id: 'facebook', label: 'Share on Facebook', url: 'https://www.facebook.com/sharer/sharer.php?u={{url}}'},
@@ -153,6 +159,16 @@
 					_togglePswpClass(_controls, 'ui--one-slide', hasOneSlide);
 					_galleryHasOneSlide = hasOneSlide;
 				}
+			},
+			_downloadFile = function () {
+				var link = document.createElement('A');
+				link.setAttribute('href', pswp.currItem.downloadURL || pswp.currItem.src || '');
+				link.setAttribute('target', '_blank');
+				link.setAttribute('download', '');
+
+				_downloadButton.appendChild(link);
+				link.click();
+				_downloadButton.removeChild(link);
 			},
 			_toggleShareModalClass = function () {
 				_togglePswpClass(_shareModal, 'share-modal--hidden', _shareModalHidden);
@@ -327,9 +343,9 @@
 			},
 			_applyNavBarGaps = function (item) {
 				var gap = item.vGap;
+				var bars = _options.barsSize;
 
 				if (_fitControlsInViewport()) {
-					var bars = _options.barsSize;
 					if (_options.captionEl && bars.bottom === 'auto') {
 						if (!_fakeCaptionContainer) {
 							_fakeCaptionContainer = framework.createEl('pswp__caption pswp__caption--fake');
@@ -352,6 +368,8 @@
 				} else {
 					gap.top = gap.bottom = 0;
 				}
+				item.hGap.left = bars.left;
+				item.hGap.right = bars.right;
 			},
 			_setupIdle = function () {
 				// Hide controls when mouse is used
@@ -425,6 +443,14 @@
 				onTap: function () {
 					_toggleShareModal();
 				}
+			},
+			{
+				name: 'button--download',
+				option: 'downloadEl',
+				onInit: function (el) {
+					_downloadButton = el;
+				},
+				onTap: _downloadFile
 			},
 			{
 				name: 'button--zoom',
@@ -707,6 +733,8 @@
 						if (pswp.getZoomLevel() === 1 && pswp.getZoomLevel() <= pswp.currItem.fitRatio) {
 							if (_options.clickToCloseNonZoomable) {
 								pswp.close();
+							} else if (_options.clickToShowNextNonZoomable) {
+								pswp.next();
 							}
 						} else {
 							pswp.toggleDesktopZoom(e.detail.releasePoint);

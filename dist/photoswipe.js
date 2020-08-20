@@ -1,7 +1,11 @@
-/*! PhotoSwipe - v4.1.4 - 2020-08-12
-* http://photoswipe.com
-* Copyright (c) 2020 Dmitry Semenov; */
+/*!
+ * PhotoSwipe - v4.1.4 - 2020-08-20
+ * http://photoswipe.com
+ * Copyright (c) 2020 Dmitry Semenov;
+ */
+
 (function (root, factory) { 
+	if (root === undefined && window !== undefined) root = window;
 	if (typeof define === 'function' && define.amd) {
 		define(factory);
 	} else if (typeof exports === 'object') {
@@ -42,6 +46,11 @@ var framework = {
 			el.className = classes;
 		}
 		return el;
+	},
+	resetEl: function (el) {
+		while (el.firstChild) {
+			el.removeChild(el.firstChild);
+		}
 	},
 	getScrollY: function () {
 		var yOffset = window.pageYOffset;
@@ -2417,12 +2426,16 @@ var _showOrHideTimeout,
 		if (!duration || !thumbBounds || thumbBounds.x === undefined) {
 			_shout('initialZoom' + (out ? 'Out' : 'In'));
 
-			_currZoomLevel = item.initialZoomLevel;
-			_equalizePoints(_panOffset, item.initialPosition);
-			_applyCurrentZoomPan();
+			if (!out) {
+				_currZoomLevel = item.initialZoomLevel;
+				_equalizePoints(_panOffset, item.initialPosition);
+				_applyCurrentZoomPan();
 
-			template.style.opacity = out ? 0 : 1;
-			_applyBgOpacity(1);
+				template.style.opacity = 1;
+				_applyBgOpacity(1);
+			} else {
+				template.style.opacity = 0;
+			}
 
 			if (duration) {
 				setTimeout(function () {
@@ -2574,17 +2587,18 @@ var _getItemAt,
 		var bounds = item.bounds;
 
 		// position of element when it's centered
-		bounds.center.x = Math.round((_tempPanAreaSize.x - realPanElementW) / 2);
+		bounds.center.x = Math.round((_tempPanAreaSize.x - realPanElementW) / 2) + item.hGap.left;
 		bounds.center.y = Math.round((_tempPanAreaSize.y - realPanElementH) / 2) + item.vGap.top;
 
 		// maximum pan position
-		bounds.max.x = realPanElementW > _tempPanAreaSize.x ? Math.round(_tempPanAreaSize.x - realPanElementW) : bounds.center.x;
+		bounds.max.x =
+			realPanElementW > _tempPanAreaSize.x ? Math.round(_tempPanAreaSize.x - realPanElementW) + item.hGap.left : bounds.center.x;
 
 		bounds.max.y =
 			realPanElementH > _tempPanAreaSize.y ? Math.round(_tempPanAreaSize.y - realPanElementH) + item.vGap.top : bounds.center.y;
 
 		// minimum pan position
-		bounds.min.x = realPanElementW > _tempPanAreaSize.x ? 0 : bounds.center.x;
+		bounds.min.x = realPanElementW > _tempPanAreaSize.x ? item.hGap.left : bounds.center.x;
 		bounds.min.y = realPanElementH > _tempPanAreaSize.y ? item.vGap.top : bounds.center.y;
 	},
 	_calculateItemSize = function (item, viewportSize, zoomLevel) {
@@ -2595,11 +2609,16 @@ var _getItemAt,
 				if (!item.vGap) {
 					item.vGap = {top: 0, bottom: 0};
 				}
+				if (!item.hGap) {
+					item.hGap = {left: 0, right: 0};
+				}
 				// allows overriding vertical margin for individual items
 				_shout('parseVerticalMargin', item);
+				// allows overriding horizontal margin for individual items
+				_shout('parseHorizontalMargin', item);
 			}
 
-			_tempPanAreaSize.x = viewportSize.x;
+			_tempPanAreaSize.x = viewportSize.x - item.hGap.left - item.hGap.right;
 			_tempPanAreaSize.y = viewportSize.y - item.vGap.top - item.vGap.bottom;
 
 			if (isInitial) {
@@ -2708,7 +2727,7 @@ var _getItemAt,
 	_checkForError = function (item, cleanUp) {
 		if (item.src && item.loadError && item.container) {
 			if (cleanUp) {
-				item.container.innerHTML = '';
+				framework.resetEl(item.container);
 			}
 
 			item.container.innerHTML = _options.errorMsg.replace('%url%', item.src);
@@ -2883,7 +2902,7 @@ _registerModule('Controller', {
 				img;
 
 			if (!item) {
-				holder.el.innerHTML = '';
+				framework.resetEl(holder.el);
 				return;
 			}
 
@@ -3005,7 +3024,7 @@ _registerModule('Controller', {
 				_applyZoomPanToItem(item);
 			}
 
-			holder.el.innerHTML = '';
+			framework.resetEl(holder.el);
 			holder.el.appendChild(baseDiv);
 		},
 
@@ -3084,7 +3103,13 @@ _registerModule('Tap', {
 					return;
 				}
 
+				// Fix for share buttons zooming image.
+				// @see https://github.com/dimsemenov/PhotoSwipe/issues/1198
 				var clickedTagName = e.target.tagName.toUpperCase();
+				if (clickedTagName === 'A') {
+					return;
+				}
+
 				// avoid double tap delay on buttons and elements that have class pswp__single-tap
 				if (clickedTagName === 'BUTTON' || framework.hasClass(e.target, 'pswp__single-tap')) {
 					_dispatchTapEvent(e, releasePoint);

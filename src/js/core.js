@@ -233,7 +233,9 @@ var _isOpen,
 		_shout('bindEvents');
 	},
 	_unbindEvents = function () {
-		framework.unbind(window, 'resize scroll orientationchange', self);
+		setTimeout(function () {
+			framework.unbind(window, 'resize scroll orientationchange', self);
+		}, 400);
 		framework.unbind(window, 'scroll', _globalEventHandlers.scroll);
 		framework.unbind(document, 'keydown', self);
 		framework.unbind(document, 'mousemove', _onFirstMouseMove);

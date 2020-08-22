@@ -10,7 +10,7 @@
     "prettier:js": "prettier src/js/{,*/**/}*.js --write",
     "prettier:css": "prettier src/css/{,*/**/}*.scss --write",
     "prettier:gruntfile": "prettier Gruntfile.js --write",
-    "test": "grunt jshint"
+    "test": "grunt hint"
   },
   "devDependencies": {
     "grunt": "~1.2.1",

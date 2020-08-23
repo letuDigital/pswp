@@ -93,19 +93,27 @@ Coded something useful? <a href='mailto:diiiimaaaa@gmail.com?subject="PhotoSwipe
 
 ## Build 
 
-To compile PhotoSwipe by yourself, make sure that you have [Node.js](http://nodejs.org/), [Grunt.js](https://github.com/cowboy/grunt), [Ruby](http://www.ruby-lang.org/) and [Jekyll](https://github.com/mojombo/jekyll/) installed, then:
+To compile PhotoSwipe by yourself, make sure that you have [Node.js](http://nodejs.org/) (or [yarn](https://yarnpkg.com/lang/en/docs/install)), [Grunt.js](https://github.com/cowboy/grunt), [Ruby](http://www.ruby-lang.org/) and [Jekyll](https://github.com/mojombo/jekyll/) installed, then:
 
 1) Clone the repository
 
-	git clone https://github.com/andi34/PhotoSwipe.git
+	`git clone https://github.com/andi34/PhotoSwipe.git`
 
 2) Go inside the PhotoSwipe folder that you fetched and install Node dependencies
 
-	cd PhotoSwipe && npm install
+	`cd PhotoSwipe && npm install`
 
-3) Run `grunt` to generate the JS and CSS files in the `dist` folder and the site in the `_site/` folder
+3) If you make changes to files inside the `src` folder, make sure code style matches the project defaults
 
-	grunt
+	`npm prettier`
+
+4) Generate the JS and CSS files in the `dist` folder and the site in the `_site/` folder
+
+	`npm build`
+
+5) Check files inside `dist` folder for lint errors
+
+	`npm test`
 
 Optionally:
 

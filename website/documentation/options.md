@@ -184,7 +184,7 @@ Function is called each time zoom-in animation is initiated. So feel free to ret
 
 Loop slides when using swipe gesture. If set to `true` you'll be able to swipe from last to first image. Option is always `false` when there are less than 3 slides.
 
-This option has no relation to arrows navigation. Arrows loop is turned on permanently. You can modify this behavior by making custom UI.
+**Note:** `history` needs to be set to `true` and `history.js` module must be included in your build.
 
 
 ### `pinchToClose` <code class="default">boolean</code> <code class="default">true</code>

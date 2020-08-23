@@ -1,7 +1,7 @@
 # PhotoSwipe Repository 
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/andreasblaesius)
-
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/andreasblaesius)  
+[![Lint](https://github.com/andi34/PhotoSwipe/workflows/Lint/badge.svg?branch=master)](https://github.com/andi34/PhotoSwipe/actions?query=branch%3Amaster+workflow%3ALint)
 
 JavaScript image gallery for mobile and desktop. 
 

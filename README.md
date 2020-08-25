@@ -67,6 +67,12 @@ JavaScript image gallery for mobile and desktop.
   Various fixes
 - delay unbind of scroll listener until close animation finish  
   Fix from [dimsemenov#1492 comment](https://github.com/dimsemenov/PhotoSwipe/issues/1492#issuecomment-447886917), Fixes [dimsemenov#1492](https://github.com/dimsemenov/PhotoSwipe/issues/1492)
+- [dimsemenov/PhotoSwipe#1103](https://github.com/dimsemenov/PhotoSwipe/pull/1103)  
+  added new option to toggle off swiping. update options in docs
+- [dimsemenov/PhotoSwipe#1708](https://github.com/dimsemenov/PhotoSwipe/pull/1708)  
+  Fixed: When Clicking Close Button, Overlapped Div Gets Clicked Also!
+- [dimsemenov/PhotoSwipe#1262](https://github.com/dimsemenov/PhotoSwipe/pull/1262)  
+  Animated transitions
 
 ## Location of files
 

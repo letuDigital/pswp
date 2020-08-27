@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoSwipe</title>
+    <script src='dist/photoswipe.min.js'></script>
+    <script src='dist/photoswipe-ui-default.min.js'></script>
+    <link rel='stylesheet' href='dist/photoswipe.css'>
+    <link rel='stylesheet' href='dist/default-skin/default-skin.css'>
+    <style>
+        #btn {
+            float: left;
+            line-height: 3em;
+            z-index:
+        }
+    </style>
+</head>
+
+<body>
+    <button id="btn">Open PhotoSwipe</button>
+
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+        <!-- Background of PhotoSwipe.
+         It's a separate element, as animating opacity is faster than rgba(). -->
+        <div class="pswp__bg"></div>
+
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+
+            <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+            <div class="pswp__container">
+                <!-- don't modify these 3 pswp__item elements, data is added later on -->
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+
+                <div class="pswp__top-bar">
+
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+
+                    <div class="pswp__counter"></div>
+
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                    <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                    <!-- element will get class pswp__preloader--active when preloader is running -->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        var openPhotoSwipe = function () {
+            var pswpElement = document.querySelectorAll('.pswp')[0];
+
+            // build items array
+            var items = [
+                {
+                    src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
+                    w: 964,
+                    h: 1024
+                },
+                {
+                    src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
+                    w: 1024,
+                    h: 683
+                },
+                // Auto sized images
+                {
+                    src: 'https://farm4.staticflickr.com/3920/15008465772_d50c8f0531_h.jpg',
+                    autoSize: true,
+                    title: 'Example caption. Image height and width defined via "autoSize: true"'
+                },
+                {
+                    src: 'https://farm6.staticflickr.com/5591/15008867125_b61960af01_h.jpg',
+                    autoSize: true,
+                    title: 'Another example caption. Image height and width defined also via "autoSize: true"'
+                }
+            ];
+
+            // define options (if needed)
+            var options = {
+                // history & focus options are disabled on CodePen
+                history: true,
+                focus: false,
+                loop: false,
+                pinchToClose: true,
+                closeOnScroll: true,
+                closeOnVerticalDrag: true,
+                bgOpacity: 1,
+                preventSwiping: false,
+                showAnimationDuration: 0,
+                hideAnimationDuration: 0,
+                animateTransitions: true,
+
+                closeEl: true,
+                captionEl: true,
+                fullscreenEl: true,
+                zoomEl: true,
+                shareEl: true,
+                downloadEl: true,
+                counterEl: true,
+                arrowEl: true,
+                preloaderEl: true,
+                closeOnOutsideClick: false,
+                tapToClose: false,
+                tapToToggleControls: false
+            };
+
+            var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+
+            // After gallery is closed and closing animation finished.
+            // Clean up your stuff here.
+            gallery.listen('destroy', function () {
+                console.log('PhotoSwipe is closed');
+            });
+            gallery.init();
+            console.log('PhotoSwipe is open');
+        };
+
+        document.getElementById('btn').onclick = openPhotoSwipe;
+    </script>
+</body>
+
+</html>

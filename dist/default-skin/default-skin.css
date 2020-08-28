@@ -95,8 +95,8 @@
   background-position: -132px 0; }
 
 /* no arrows on touch screens */
-.pswp--touch .pswp__button--arrow--left,
-.pswp--touch .pswp__button--arrow--right {
+.pswp--touch:not(.pswp--preventswipe) .pswp__button--arrow--left,
+.pswp--touch:not(.pswp--preventswipe) .pswp__button--arrow--right {
   visibility: hidden; }
 
 /*
@@ -469,7 +469,8 @@ a.pswp__share--download:hover {
 .pswp__ui--hidden .pswp__button--arrow--left,
 .pswp__ui--hidden .pswp__button--arrow--right {
   /* Force paint & create composition layer for controls. */
-  opacity: 0.001; }
+  opacity: 0.001;
+  visibility: hidden; }
 
 /* pswp__ui--one-slide class is added when there is just one item in gallery */
 .pswp__ui--one-slide .pswp__button--arrow--left,

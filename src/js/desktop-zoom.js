@@ -19,10 +19,6 @@ _registerModule('DesktopZoom', {
 				return;
 			}
 
-			self.setupDesktopZoom();
-
-			/* There seems to be a timing problem so this may run before a mouseevent is detected in which case
-			   setupDesktopZoom is not run if _likelyTouchDevice was set to true. Just run it all the time.
 			if(_likelyTouchDevice) {
 				// if detected hardware touch support, we wait until mouse is used,
 				// and only then apply desktop-zoom features
@@ -32,7 +28,6 @@ _registerModule('DesktopZoom', {
 			} else {
 				self.setupDesktopZoom(true);
 			}
-			*/
 		},
 
 		setupDesktopZoom: function (onInit) {

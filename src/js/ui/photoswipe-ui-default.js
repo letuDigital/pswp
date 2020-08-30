@@ -56,21 +56,17 @@
 						return false;
 					}
 					innerCaptionElement.innerHTML = item.title;
-
 					// If allowLongCaptions is true, position caption just under picture and show "Expand" button if necessary
 					if (_options.allowLongCaptions) {
 						var imagePositionTop = 0;
 						var apparentImageHeight = 1024;
 						var gapTop = item.vGap.top;
+						var naturalCaptionHeight = innerCaptionElement.clientHeight;
+						var captionCtrl = document.querySelector('.pswp__button--caption--ctrl');
 
 						ui.resetCaption();
-						var naturalCaptionHeight = innerCaptionElement.clientHeight;
-
-						var captionCtrl = captionElement.querySelector('.pswp__button--caption--ctrl');
-
 						_setLayoutData(captionElement, imagePositionTop, apparentImageHeight, gapTop, naturalCaptionHeight);
 						var layoutData = _getLayoutData(captionElement);
-
 						// Show the 'expand' control only if caption extends out of view. Reset height first.
 						if (naturalCaptionHeight - 10 > layoutData.maxCollapsedCaptionHeight) {
 							captionCtrl.classList.add('pswp__button--caption--ctrl--expand');
@@ -179,7 +175,7 @@
 
 		var _toggleCaption = function (captionCtrl) {
 			if (!captionCtrl) {
-				captionCtrl = pswp.scrollWrap.querySelector('.pswp__button--caption--ctrl');
+				captionCtrl = document.querySelector('.pswp__button--caption--ctrl');
 			}
 
 			var captionElement = captionCtrl.parentNode;
@@ -819,7 +815,7 @@
 
 			// clean up things when gallery is destroyed
 			_listen('destroy', function () {
-				if (_options.showCaption) {
+				if (_options.captionEl) {
 					if (_fakeCaptionContainer) {
 						_controls.removeChild(_fakeCaptionContainer);
 					}
@@ -877,7 +873,7 @@
 			if (_controlsVisible && pswp.currItem) {
 				ui.updateIndexIndicator();
 
-				if (_options.showCaption) {
+				if (_options.captionEl) {
 					_options.addCaptionHTMLFn(pswp.currItem, _captionContainer);
 
 					_togglePswpClass(_captionContainer, 'caption--empty', !pswp.currItem.title);
@@ -909,7 +905,7 @@
 		};
 
 		ui.updateIndexIndicator = function () {
-			if (_options.showCounter) {
+			if (_options.counterEl) {
 				_indexIndicator.innerHTML = pswp.getCurrentIndex() + 1 + _options.indexIndicatorSep + _options.getNumItemsFn();
 			}
 			if (!_options.loop) {

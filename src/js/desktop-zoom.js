@@ -19,15 +19,20 @@ _registerModule('DesktopZoom', {
 				return;
 			}
 
-			if (_likelyTouchDevice) {
+			self.setupDesktopZoom();
+
+			/* There seems to be a timing problem so this may run before a mouseevent is detected in which case
+			   setupDesktopZoom is not run if _likelyTouchDevice was set to true. Just run it all the time.
+			if(_likelyTouchDevice) {
 				// if detected hardware touch support, we wait until mouse is used,
 				// and only then apply desktop-zoom features
-				_listen('mouseUsed', function () {
+				_listen('mouseUsed', function() {
 					self.setupDesktopZoom();
 				});
 			} else {
 				self.setupDesktopZoom(true);
 			}
+			*/
 		},
 
 		setupDesktopZoom: function (onInit) {
@@ -83,6 +88,28 @@ _registerModule('DesktopZoom', {
 		},
 
 		handleMouseWheel: function (e) {
+			// If scrolling down on a collapsed long caption, expand the caption
+			var _target = e.target || e.srcElement;
+			var targetCaption = _target.closest('.pswp__caption');
+			if (targetCaption) {
+				var toggleCaptionBtn = targetCaption.querySelector('.pswp__button--caption--ctrl');
+				if (toggleCaptionBtn) {
+					if (toggleCaptionBtn.classList.contains('pswp__button--caption--ctrl--expand') && e.wheelDeltaY < -50) {
+						self.ui.toggleCaption(toggleCaptionBtn);
+					} else if (toggleCaptionBtn.classList.contains('pswp__button--caption--ctrl--collapse')) {
+						// Collapse the caption if scrolled to the top and user scrolls further
+						var innerCaptionElement = targetCaption.querySelector('.pswp__caption__center');
+						if (innerCaptionElement.scrollTop == 0 && e.wheelDeltaY > 50) {
+							self.ui.toggleCaption(toggleCaptionBtn);
+						}
+					} else {
+						e.preventDefault();
+					}
+
+					return;
+				}
+			}
+
 			if (_currZoomLevel <= self.currItem.fitRatio) {
 				if (_options.modal) {
 					if (!_options.closeOnScroll || _numAnimations || _isDragging) {
@@ -116,6 +143,7 @@ _registerModule('DesktopZoom', {
 				if (e.wheelDeltaX) {
 					_wheelDelta.x = -0.16 * e.wheelDeltaX;
 				}
+
 				if (e.wheelDeltaY) {
 					_wheelDelta.y = -0.16 * e.wheelDeltaY;
 				} else {

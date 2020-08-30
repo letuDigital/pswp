@@ -1,5 +1,5 @@
 /*!
- * PhotoSwipe - v4.3.0 - 2020-08-28
+ * PhotoSwipe - v4.3.0 - 2020-08-30
  * http://photoswipe.com
  * Copyright (c) 2020 Dmitry Semenov;
  */
@@ -42,7 +42,7 @@ var framework = {
 	isArray: function (obj) {
 		return obj instanceof Array;
 	},
-	createEl: function (classes, tag) {
+	createElement: function (classes, tag) {
 		var el = document.createElement(tag || 'div');
 		if (classes) {
 			el.className = classes;
@@ -156,7 +156,7 @@ var framework = {
 		if (framework.features) {
 			return framework.features;
 		}
-		var helperEl = framework.createEl(),
+		var helperEl = framework.createElement(),
 			helperStyle = helperEl.style,
 			vendor = '',
 			features = {};
@@ -301,6 +301,24 @@ if (framework.features.oldIE) {
 	};
 }
 
+// Polyfill for closest() for IE11 from https://developer.mozilla.org/en-US/docs/Web/API/Element/closest.
+// Not bothering with versions older than 11 and it is debatable whether we should worry even about 11 now.
+if (!Element.prototype.matches) {
+	Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+}
+
+if (!Element.prototype.closest) {
+	Element.prototype.closest = function (s) {
+		var el = this;
+
+		do {
+			if (Element.prototype.matches.call(el, s)) return el;
+			el = el.parentElement || el.parentNode;
+		} while (el !== null && el.nodeType === 1);
+		return null;
+	};
+}
+
 
 /*>>framework-bridge*/
 
@@ -326,8 +344,8 @@ var _options = {
 	mouseUsed: false,
 	loop: true,
 	pinchToClose: true,
-	closeOnScroll: true,
-	closeOnVerticalDrag: true,
+	closeOnScroll: true, // Will be overridden if allowLongCaptions is true
+	closeOnVerticalDrag: true, // Will be overridden if allowLongCaptions is true
 	verticalDragRange: 0.75,
 	hideAnimationDuration: 333,
 	showAnimationDuration: 333,
@@ -616,6 +634,7 @@ var _isOpen,
 		_setTranslateX = function (x, elStyle) {
 			elStyle.left = x + 'px';
 		};
+
 		_applyZoomPanToItem = function (item) {
 			var zoomRatio = item.fitRatio > 1 ? 1 : item.fitRatio,
 				s = item.container.style,
@@ -626,7 +645,12 @@ var _isOpen,
 			s.height = h + 'px';
 			s.left = item.initialPosition.x + 'px';
 			s.top = item.initialPosition.y + 'px';
+
+			item.zoom = zoomRatio;
+			item.apparentImageHeight = h;
+			item.imageFromTop = item.initialPosition;
 		};
+
 		_applyCurrentZoomPan = function () {
 			if (_currZoomElementStyle) {
 				var s = _currZoomElementStyle,
@@ -652,6 +676,21 @@ var _isOpen,
 				keydownAction = 'prev';
 			} else if (e.keyCode === 39) {
 				keydownAction = 'next';
+			} else if (e.keyCode === 13 || e.keyCode === 32) {
+				/* Enter or spacebar */
+				var btnCaptionCtrl = document.getElementById('pswp__button--caption--ctrl');
+				if (btnCaptionCtrl) {
+					if (
+						btnCaptionCtrl.classList.contains('pswp__button--caption--ctrl--expand') ||
+						btnCaptionCtrl.classList.contains('pswp__button--caption--ctrl--collapse')
+					) {
+						// Add tabindex to the caption div so that it can take focus and be controlled by up/down arrows
+						var innerCaptionElement = btnCaptionCtrl.parentNode.querySelector('.pswp__caption__center');
+						innerCaptionElement.setAttribute('tabindex', '-1');
+						innerCaptionElement.focus();
+						keydownAction = 'toggleCaption';
+					}
+				}
 			}
 		}
 
@@ -841,7 +880,7 @@ var publicMethods = {
 			self['init' + _modules[i]]();
 		}
 
-		// init
+		// Create new PhotoSwipeUI_Default object and run init
 		if (UiClass) {
 			var ui = (self.ui = new UiClass(self, framework));
 			ui.init();
@@ -979,8 +1018,8 @@ var publicMethods = {
 		framework.unbind(window, 'scroll', self);
 
 		_stopDragUpdateLoop();
-
 		_stopAllAnimations();
+		self.ui.resetCaption();
 
 		_listeners = {};
 	},
@@ -1052,6 +1091,7 @@ var publicMethods = {
 			self.updateCurrItem();
 		}
 	},
+
 	next: function () {
 		if (!_options.loop && _currentItemIndex === _getNumItems() - 1) {
 			return;
@@ -1101,6 +1141,10 @@ var publicMethods = {
 
 		self.invalidateCurrItems();
 		self.updateSize(true);
+	},
+
+	toggleCaption: function (el) {
+		self.ui.toggleCaption(el);
 	},
 
 	// update current zoom/pan objects
@@ -1162,6 +1206,7 @@ var publicMethods = {
 			_containerShiftIndex += _indexDiff + (_indexDiff > 0 ? -NUM_HOLDERS : NUM_HOLDERS);
 			diffAbs = NUM_HOLDERS;
 		}
+
 		for (var i = 0; i < diffAbs; i++) {
 			if (_indexDiff > 0) {
 				tempHolder = _itemHolders.shift();
@@ -1395,6 +1440,7 @@ var _gestureStartTime,
 	_opacityChanged,
 	_bgOpacity,
 	_wasOverInitialZoom,
+	_target,
 	_isEqualPoints = function (p1, p2) {
 		return p1.x === p2.x && p1.y === p2.y;
 	},
@@ -1441,7 +1487,6 @@ var _gestureStartTime,
 	_preventObj = {},
 	_preventDefaultEventBehaviour = function (e, isDown) {
 		_preventObj.prevent = !_closestElement(e.target, _options.isClickableElement);
-
 		_shout('preventDragEvent', e, isDown, _preventObj);
 		return _preventObj.prevent;
 	},
@@ -1572,8 +1617,6 @@ var _gestureStartTime,
 						}
 					}
 				}
-
-				//
 			}
 
 			if (axis === 'x') {
@@ -1636,6 +1679,8 @@ var _gestureStartTime,
 
 		_shout('pointerDown');
 
+		_target = e.target || e.srcElement;
+
 		if (_pointerEventEnabled) {
 			var pointerIndex = framework.arraySearch(_currPointers, e.pointerId, 'id');
 			if (pointerIndex < 0) {
@@ -1655,6 +1700,7 @@ var _gestureStartTime,
 		if (!_isDragging || numPoints === 1) {
 			_isDragging = _isFirstMove = true;
 			framework.bind(window, _upMoveEvents, self);
+			// framework.bind(window, _downEvents, self); // I thought this might be needed to collapse caption but it made no difference.
 
 			_isZoomingIn = _wasOverInitialZoom = _opacityChanged = _verticalDragInitiated = _mainScrollShifted = _moved = _isMultitouch = _zoomStarted = false;
 
@@ -1744,7 +1790,6 @@ var _gestureStartTime,
 			}
 		}
 	},
-	//
 	_renderMovement = function () {
 		if (!_currentPoints) {
 			return;
@@ -1842,7 +1887,6 @@ var _gestureStartTime,
 			_applyCurrentZoomPan();
 		} else {
 			// handle behaviour for one point (dragging or panning)
-
 			if (!_direction) {
 				return;
 			}
@@ -1851,7 +1895,6 @@ var _gestureStartTime,
 				_isFirstMove = false;
 
 				// subtract drag distance that was used during the detection direction
-
 				if (Math.abs(delta.x) >= DIRECTION_CHECK_OFFSET) {
 					delta.x -= _currentPoints[0].x - _startPoint.x;
 				}
@@ -1868,6 +1911,30 @@ var _gestureStartTime,
 			if (delta.x === 0 && delta.y === 0) {
 				return;
 			}
+
+			/* **************************************************************
+			 Commenting this section out because it does not work reliably
+			 especially when swiping down in an attempt to close the caption.
+			 I'd be grateful if anyone can figure out why and fix it.
+			*****************************************************************
+			// If dragging up on a collapsed long caption, expand the caption; 
+			// If dragging down on expanded long caption when at the top, collapse the caption.
+			if(_direction === 'v' && _options.allowLongCaptions) {
+				var targetCaption = _target.closest(".pswp__caption");
+				if(targetCaption) {
+					var toggleCaptionBtn = targetCaption.querySelector(".pswp__button--caption--ctrl");
+					var isExpanded = toggleCaptionBtn.classList.contains("pswp__button--caption--ctrl--collapse");
+					var isCollapsed = toggleCaptionBtn.classList.contains("pswp__button--caption--ctrl--expand");
+					var innerCaptionElement = targetCaption.querySelector(".pswp__caption__center");
+
+					if((delta.y < -DIRECTION_CHECK_OFFSET && isCollapsed) || 
+					   (delta.y > DIRECTION_CHECK_OFFSET && isExpanded && innerCaptionElement.scrollTop === 0)) {
+						self.ui.toggleCaption(toggleCaptionBtn);
+						return;
+					}
+				}
+			}
+			*/
 
 			if (_direction === 'v' && _options.closeOnVerticalDrag) {
 				if (!_canPan()) {
@@ -1988,6 +2055,7 @@ var _gestureStartTime,
 		if (numPoints === 0) {
 			_isDragging = false;
 			framework.unbind(window, _upMoveEvents, self);
+			// framework.unbind(window, _downEvents, self); // I thought this might be needed to collapse caption but it made no difference.
 
 			_stopDragUpdateLoop();
 
@@ -2383,8 +2451,10 @@ _registerModule('Gestures', {
 			_downEvents = _dragStartEvent;
 
 			if (_pointerEventEnabled && !_likelyTouchDevice) {
+				// 'likely' - Windows 10 laptop with trackpad, TrackPoint and mouse but no touch support reports maxTouchPoints = 2.
 				_likelyTouchDevice = navigator.maxTouchPoints > 1 || navigator.msMaxTouchPoints > 1;
 			}
+
 			// make variable public
 			self.likelyTouchDevice = _likelyTouchDevice;
 
@@ -2674,7 +2744,6 @@ var _getItemAt,
 				var vRatio = _tempPanAreaSize.y / item.h;
 
 				item.fitRatio = hRatio < vRatio ? hRatio : vRatio;
-				//item.fillRatio = hRatio > vRatio ? hRatio : vRatio;
 
 				var scaleMode = _options.scaleMode;
 
@@ -2741,7 +2810,8 @@ var _getItemAt,
 	_preloadImage = function (item) {
 		item.loading = true;
 		item.loaded = false;
-		var img = (item.img = framework.createEl('pswp__img', 'img'));
+		var img = (item.img = framework.createElement('pswp__img', 'img'));
+
 		var onComplete = function () {
 			item.loading = false;
 			item.loaded = true;
@@ -2762,7 +2832,9 @@ var _getItemAt,
 			img.onload = img.onerror = null;
 			img = null;
 		};
+
 		img.onload = onComplete;
+
 		img.onerror = function () {
 			item.loadError = true;
 			onComplete();
@@ -2815,6 +2887,7 @@ var _getItemAt,
 		img.style.width = w + 'px';
 		img.style.height = h + 'px';
 	},
+	// What is this?
 	_appendImagesPool = function () {
 		if (_imagesToAppendPool.length) {
 			var poolItem;
@@ -2847,6 +2920,7 @@ _registerModule('Controller', {
 
 			_preloadImage(item);
 		},
+
 		initController: function () {
 			framework.extend(_options, _controllerDefaultOptions, true);
 			self.items = _items = items;
@@ -2924,7 +2998,7 @@ _registerModule('Controller', {
 		allowProgressiveImg: function () {
 			// 1. Progressive image loading isn't working on webkit/blink
 			//    when hw-acceleration (e.g. translateZ) is applied to IMG element.
-			//    That's why in PhotoSwipe parent element gets zoom transform, not image itself.
+			//    That's why in PhotoSwipe parent element (.pwsp__zoom-wrap) gets zoom transform, not image itself.
 			//
 			// 2. Progressive image loading sometimes blinks in webkit/blink when applying animation to parent element.
 			//    That's why it's disabled on touch devices (mainly because of swipe transition)
@@ -2947,7 +3021,8 @@ _registerModule('Controller', {
 			}
 
 			var item = self.getItemAt(index),
-				img;
+				img,
+				imageSize;
 
 			if (!item) {
 				framework.resetEl(holder.el);
@@ -2961,8 +3036,9 @@ _registerModule('Controller', {
 			holder.item = item;
 
 			// base container DIV is created only once for each of 3 holders
-			var baseDiv = (item.container = framework.createEl('pswp__zoom-wrap'));
+			var baseDiv = (item.container = framework.createElement('pswp__zoom-wrap'));
 
+			// Insert HTML if that is specified instead of an image.
 			if (!item.src && item.html) {
 				if (item.html.tagName) {
 					baseDiv.appendChild(item.html);
@@ -2995,6 +3071,7 @@ _registerModule('Controller', {
 							}
 							return;
 						}
+
 						if (!item.imageAppended) {
 							if (_features.transform && (_mainScrollAnimating || _initialZoomRunning)) {
 								_imagesToAppendPool.push({
@@ -3027,12 +3104,12 @@ _registerModule('Controller', {
 					var placeholderClassName = 'pswp__img pswp__img--placeholder';
 					placeholderClassName += item.msrc ? '' : ' pswp__img--placeholder--blank';
 
-					var placeholder = framework.createEl(placeholderClassName, item.msrc ? 'img' : '');
+					var placeholder = framework.createElement(placeholderClassName, item.msrc ? 'img' : '');
 					if (item.msrc) {
 						placeholder.src = item.msrc;
 					}
 
-					_setImageSize(item, placeholder);
+					imageSize = _setImageSize(item, placeholder);
 
 					baseDiv.appendChild(placeholder);
 					item.placeholder = placeholder;
@@ -3058,13 +3135,15 @@ _registerModule('Controller', {
 				}
 			} else if (item.src && !item.loadError) {
 				// image object is created every time, due to bugs of image loading & delay when switching images
-				img = framework.createEl('pswp__img', 'img');
+				img = framework.createElement('pswp__img', 'img');
 				img.style.opacity = 1;
 				img.src = item.src;
-				_setImageSize(item, img);
+				imageSize = _setImageSize(item, img);
 				_appendImage(index, item, baseDiv, img, true);
 			}
 
+			var scale = 1;
+			var transform = {};
 			if (!_initialContentSet && index === _currentItemIndex) {
 				_currZoomElementStyle = baseDiv.style;
 				_showOrHide(item, img || item.img);
@@ -3200,15 +3279,20 @@ _registerModule('DesktopZoom', {
 				return;
 			}
 
-			if (_likelyTouchDevice) {
+			self.setupDesktopZoom();
+
+			/* There seems to be a timing problem so this may run before a mouseevent is detected in which case
+			   setupDesktopZoom is not run if _likelyTouchDevice was set to true. Just run it all the time.
+			if(_likelyTouchDevice) {
 				// if detected hardware touch support, we wait until mouse is used,
 				// and only then apply desktop-zoom features
-				_listen('mouseUsed', function () {
+				_listen('mouseUsed', function() {
 					self.setupDesktopZoom();
 				});
 			} else {
 				self.setupDesktopZoom(true);
 			}
+			*/
 		},
 
 		setupDesktopZoom: function (onInit) {
@@ -3264,6 +3348,28 @@ _registerModule('DesktopZoom', {
 		},
 
 		handleMouseWheel: function (e) {
+			// If scrolling down on a collapsed long caption, expand the caption
+			var _target = e.target || e.srcElement;
+			var targetCaption = _target.closest('.pswp__caption');
+			if (targetCaption) {
+				var toggleCaptionBtn = targetCaption.querySelector('.pswp__button--caption--ctrl');
+				if (toggleCaptionBtn) {
+					if (toggleCaptionBtn.classList.contains('pswp__button--caption--ctrl--expand') && e.wheelDeltaY < -50) {
+						self.ui.toggleCaption(toggleCaptionBtn);
+					} else if (toggleCaptionBtn.classList.contains('pswp__button--caption--ctrl--collapse')) {
+						// Collapse the caption if scrolled to the top and user scrolls further
+						var innerCaptionElement = targetCaption.querySelector('.pswp__caption__center');
+						if (innerCaptionElement.scrollTop == 0 && e.wheelDeltaY > 50) {
+							self.ui.toggleCaption(toggleCaptionBtn);
+						}
+					} else {
+						e.preventDefault();
+					}
+
+					return;
+				}
+			}
+
 			if (_currZoomLevel <= self.currItem.fitRatio) {
 				if (_options.modal) {
 					if (!_options.closeOnScroll || _numAnimations || _isDragging) {
@@ -3297,6 +3403,7 @@ _registerModule('DesktopZoom', {
 				if (e.wheelDeltaX) {
 					_wheelDelta.x = -0.16 * e.wheelDeltaX;
 				}
+
 				if (e.wheelDeltaY) {
 					_wheelDelta.y = -0.16 * e.wheelDeltaY;
 				} else {

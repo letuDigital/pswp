@@ -19,10 +19,10 @@ _registerModule('DesktopZoom', {
 				return;
 			}
 
-			if(_likelyTouchDevice) {
+			if (_likelyTouchDevice) {
 				// if detected hardware touch support, we wait until mouse is used,
 				// and only then apply desktop-zoom features
-				_listen('mouseUsed', function() {
+				_listen('mouseUsed', function () {
 					self.setupDesktopZoom();
 				});
 			} else {
@@ -94,7 +94,7 @@ _registerModule('DesktopZoom', {
 					} else if (toggleCaptionBtn.classList.contains('pswp__button--caption--ctrl--collapse')) {
 						// Collapse the caption if scrolled to the top and user scrolls further
 						var innerCaptionElement = targetCaption.querySelector('.pswp__caption__center');
-						if (innerCaptionElement.scrollTop == 0 && e.wheelDeltaY > 50) {
+						if (innerCaptionElement.scrollTop === 0 && e.wheelDeltaY > 50) {
 							self.ui.toggleCaption(toggleCaptionBtn);
 						}
 					} else {

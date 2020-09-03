@@ -464,8 +464,6 @@ _registerModule('Controller', {
 				_appendImage(index, item, baseDiv, img, true);
 			}
 
-			var scale = 1;
-			var transform = {};
 			if (!_initialContentSet && index === _currentItemIndex) {
 				_currZoomElementStyle = baseDiv.style;
 				_showOrHide(item, img || item.img);

@@ -468,8 +468,6 @@
 				var bars = _options.barsSize;
 
 				if (_fitControlsInViewport()) {
-					var bars = _options.barsSize;
-
 					if (_options.captionEl && bars.bottom === 'auto') {
 						// The _fakeCaptionContainer allows the height of the caption to be determined and the leftover
 						// space is available for the image and top bar i.e. as the caption expands, the image above it shrinks.

@@ -75,6 +75,8 @@ JavaScript image gallery for mobile and desktop.
   Animated transitions
 - [dimsemenov/PhotoSwipe#1147](https://github.com/dimsemenov/PhotoSwipe/pull/1147]  
   Select text in the caption area via mouse without triggering a swipe
+- [dimsemenov/PhotoSwipe#1074](https://github.com/dimsemenov/PhotoSwipe/pull/1074]  
+  Uses result from addCaptionHTMLFn() to decide whether there's a caption
 
 ## Location of files
 

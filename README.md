@@ -73,6 +73,8 @@ JavaScript image gallery for mobile and desktop.
   Fixed: When Clicking Close Button, Overlapped Div Gets Clicked Also!
 - [dimsemenov/PhotoSwipe#1262](https://github.com/dimsemenov/PhotoSwipe/pull/1262)  
   Animated transitions
+- [dimsemenov/PhotoSwipe#1147](https://github.com/dimsemenov/PhotoSwipe/pull/1147]  
+  Select text in the caption area via mouse without triggering a swipe
 
 ## Location of files
 

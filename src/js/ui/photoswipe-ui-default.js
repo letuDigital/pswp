@@ -20,6 +20,7 @@
 		var _overlayUIUpdated = false,
 			_controlsVisible = true,
 			_fullscrenAPI,
+			_stopAllAnimations,
 			_controls,
 			_captionContainer,
 			_fakeCaptionContainer,

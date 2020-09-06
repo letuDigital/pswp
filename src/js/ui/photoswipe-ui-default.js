@@ -50,7 +50,20 @@
 				loadingIndicatorDelay: 1000, // 2s
 
 				addCaptionHTMLFn: function (item, captionElement /*, isFake */) {
+					var captionCtrl = pswp.scrollWrap.querySelector('.pswp__button--caption--ctrl');
+					var captionElement = captionCtrl.parentNode;
 					var innerCaptionElement = captionElement.querySelector('.pswp__caption__center');
+					var imagePositionTop;
+					if (item.initialPosition) {
+						imagePositionTop = item.initialPosition.y;
+					} else {
+						imagePositionTop = 0;
+					}
+					var apparentImageHeight = Math.round(item.h * item.initialZoomLevel);
+					var gapTop = item.vGap;
+					var naturalCaptionHeight = innerCaptionElement.clientHeight;
+					var layoutData = _getLayoutData(captionElement);
+
 					if (!item.title) {
 						innerCaptionElement.innerHTML = '';
 						return false;
@@ -59,17 +72,8 @@
 
 					// If allowLongCaptions is true, position caption just under picture and show "Expand" button if necessary
 					if (_options.allowLongCaptions) {
-						var imagePositionTop = item.initialPosition.y;
-						var apparentImageHeight = Math.round(item.h * item.initialZoomLevel);
-						var gapTop = item.vGap.top;
-
 						ui.resetCaption();
-						var naturalCaptionHeight = innerCaptionElement.clientHeight;
-
-						var captionCtrl = captionElement.querySelector('.pswp__button--caption--ctrl');
-
 						_setLayoutData(captionElement, imagePositionTop, apparentImageHeight, gapTop, naturalCaptionHeight);
-						var layoutData = _getLayoutData(captionElement);
 
 						// Show the 'expand' control only if caption extends out of view. Reset height first.
 						if (naturalCaptionHeight - 10 > layoutData.maxCollapsedCaptionHeight) {

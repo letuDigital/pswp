@@ -31,7 +31,7 @@ var _showOrHideTimeout,
 		// Don't animate "out" when picture was dragged vertically
 		// otherwise use configured in/out duration
 		var duration;
-		if ((_verticalDragInitiated || _zoomStarted) && out) {
+		if (_verticalDragInitiated && out) {
 			duration = 0;
 		} else {
 			duration = out ? _options.hideAnimationDuration : _options.showAnimationDuration;

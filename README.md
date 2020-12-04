@@ -73,10 +73,14 @@ JavaScript image gallery for mobile and desktop.
   Fixed: When Clicking Close Button, Overlapped Div Gets Clicked Also!
 - [dimsemenov/PhotoSwipe#1262](https://github.com/dimsemenov/PhotoSwipe/pull/1262)  
   Animated transitions
-- [dimsemenov/PhotoSwipe#1147](https://github.com/dimsemenov/PhotoSwipe/pull/1147]  
+- [dimsemenov/PhotoSwipe#1147](https://github.com/dimsemenov/PhotoSwipe/pull/1147)  
   Select text in the caption area via mouse without triggering a swipe
-- [dimsemenov/PhotoSwipe#1074](https://github.com/dimsemenov/PhotoSwipe/pull/1074]  
+- [dimsemenov/PhotoSwipe#1074](https://github.com/dimsemenov/PhotoSwipe/pull/1074)  
   Uses result from addCaptionHTMLFn() to decide whether there's a caption
+- [dimsemenov/PhotoSwipe#1713](https://github.com/dimsemenov/PhotoSwipe/pull/1713)  
+  docs: Fix simple typo, untill -> until
+- [dimsemenov/PhotoSwipe#1371](https://github.com/dimsemenov/PhotoSwipe/pull/1371)  
+  fix firefox mouseup event not working properly
 
 ## Location of files
 

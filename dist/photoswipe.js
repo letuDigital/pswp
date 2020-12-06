@@ -1,5 +1,5 @@
 /*!
- * PhotoSwipe - v4.3.0 - 2020-08-28
+ * PhotoSwipe - v4.4.0 - 2020-12-06
  * http://photoswipe.com
  * Copyright (c) 2020 Dmitry Semenov;
  */
@@ -910,7 +910,7 @@ var publicMethods = {
 			if (_options.focus) {
 				// focus causes layout,
 				// which causes lag during the animation,
-				// that's why we delay it untill the initial zoom transition ends
+				// that's why we delay it until the initial zoom transition ends
 				template.focus();
 			}
 
@@ -2447,14 +2447,7 @@ var _showOrHideTimeout,
 			thumbBounds = _options.getThumbBoundsFn && _options.getThumbBoundsFn(_currentItemIndex);
 		}
 
-		// Don't animate "out" when picture was dragged vertically
-		// otherwise use configured in/out duration
-		var duration;
-		if ((_verticalDragInitiated || _zoomStarted) && out) {
-			duration = 0;
-		} else {
-			duration = out ? _options.hideAnimationDuration : _options.showAnimationDuration;
-		}
+		var duration = out ? _options.hideAnimationDuration : _options.showAnimationDuration;
 
 		var onComplete = function () {
 			_stopAnimation('initialZoom');

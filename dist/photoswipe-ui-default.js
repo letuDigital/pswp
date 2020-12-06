@@ -1,5 +1,5 @@
 /*!
- * PhotoSwipe Default UI - 4.3.0 - 2020-08-28
+ * PhotoSwipe Default UI - 4.4.0 - 2020-12-06
  * http://photoswipe.com
  * Copyright (c) 2020 Dmitry Semenov;
  */
@@ -26,6 +26,7 @@
 		var _overlayUIUpdated = false,
 			_controlsVisible = true,
 			_fullscrenAPI,
+			_stopAllAnimations,
 			_controls,
 			_captionContainer,
 			_fakeCaptionContainer,
@@ -582,11 +583,13 @@
 				var t = e.target || e.srcElement;
 				if (
 					t &&
+					t.nodeType === 1 &&
 					t.getAttribute('class') &&
 					e.type.indexOf('mouse') > -1 &&
 					(t.getAttribute('class').indexOf('__caption') > 0 || /(SMALL|STRONG|EM)/i.test(t.tagName))
 				) {
 					preventObj.prevent = false;
+					_stopAllAnimations();
 				}
 			});
 
@@ -605,7 +608,6 @@
 				if (!_shareModalHidden) {
 					_toggleShareModal();
 				}
-
 				if (_idleInterval) {
 					clearInterval(_idleInterval);
 				}
@@ -682,9 +684,9 @@
 				ui.updateIndexIndicator();
 
 				if (_options.captionEl) {
-					_options.addCaptionHTMLFn(pswp.currItem, _captionContainer);
+					var captionExists = _options.addCaptionHTMLFn(pswp.currItem, _captionContainer);
 
-					_togglePswpClass(_captionContainer, 'caption--empty', !pswp.currItem.title);
+					_togglePswpClass(_captionContainer, 'caption--empty', !captionExists);
 				}
 
 				_overlayUIUpdated = true;

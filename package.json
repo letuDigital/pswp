@@ -1,6 +1,6 @@
 {
-  "name": "photoswipe",
-  "version": "4.4.0",
+  "name": "pswp",
+  "version": "4.5.0",
   "engines": {
     "node": ">= 0.8.0"
   },
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/dimsemenov/Photoswipe.git"
+    "url": "git://github.com/pafnuty/pswp.git"
   },
   "description": "JavaScript gallery",
   "bugs": {
